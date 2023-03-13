@@ -3,8 +3,8 @@ spring:
     cache: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    user: seckill
+    url: jdbc:mysql://localhost:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: seckill
     password: 123456
     #连接池
     hikari:
@@ -20,7 +20,7 @@ spring:
 #mybatis
 mybatis:
   type-aliases-package: cn.edu.xmu.seckill.entity
-  mapper-location: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
 

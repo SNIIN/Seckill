@@ -6,6 +6,8 @@
 <generatorConfiguration>
 
     <context id="testTables" targetRuntime="MyBatis3">
+        <property name="overrite" value="true"/>
+
         <commentGenerator>
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
             <property name="suppressAllComments" value="true"/>
@@ -48,9 +50,9 @@
         </javaClientGenerator>
 
         <!-- 指定数据库表 -->
-        <table tableName="t_user" domainObjectName="User">
+        <table tableName="t_user" domainObjectName="User" enableSelectByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableCountByExample="false">
             <!-- 如果你想要重命名所有列，去掉一个公共前缀，你可以使用<columnRenamingRule>元素 -->
-            <!-- 如果你想要修改某个列的属性或者名称，你可以使用<columnOverride>元素 --> 
+            <!-- 如果你想要修改某个列的属性或者名称，你可以使用<columnOverride>元素 -->
             <columnOverride column="id" property="userId" javaType="java.lang.Long"/>
         </table>
 

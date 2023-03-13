@@ -1,8 +1,10 @@
 CREATE USER IF NOT EXISTS 'seckill'@'%' IDENTIFIED BY '123456';
 GRANT PROCESS ON *.* TO 'seckill'@'%';
+GRANT PROCESS ON *.* TO 'seckill'@'localhost';
 
 CREATE DATABASE IF NOT EXISTS seckill CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-GRANT ALL ON seckill.* to 'seckill'@'%';
+GRANT ALL PRIVILEGES ON seckill.* to 'seckill'@'%';
+GRANT ALL PRIVILEGES ON seckill.* to 'seckill'@'localhost';
 
 FLUSH PRIVILEGES;
 

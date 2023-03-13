@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+    <!-- 使用jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 使用md5 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
+    <!-- 使用layer弹窗 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.1.1/layer.js"></script>
+</head>
+<body>
+<!-- 灰色背景块 -->
+<div id="gray-back"></div>
+    <div class="login-area">
+        <p>秒杀系统-登录界面</p>
+        <div class="input-area">
+            <div>
+                <input id="now-line" type="text" placeholder="账号" maxlength="11", minlength="11">
+            </div>
+            <div>
+                <input id="next-line" type="password" placeholder="密码" autocomplete="off" maxlength="20">
+            </div>
+        </div>
+        <div id="login-button" class="auth-login">登录</div>
+        <ul>
+            <li>您必须登录才有权使用该系统</li>
+            <li>登录账号一般为手机号</li>
+        </ul>
+    </div>
+</body>
+    <script>
+        $(document).ready(function() {
+            $("#login-button").click(function() {
+                layer.load();
+                var username = $("#now-line").val();
+                var password = $("#next-line").val();
+                var salt = "SFAasf1aw5";
+                password = `${salt.charAt(1)}${salt.charAt(3)}${password}${salt.charAt(0)}${salt.charAt(7)}`
+                console.log(password);
+                password = md5(password);
+                console.log(password);
+                $.ajax({
+                    url: "/dologin",
+                    type: "POST",
+                    data: JSON.stringify({
+                        "mobile": username,
+                        "password": password
+                    }),
+                    contentType: "application/json;charset=utf-8",
+                    success: function(data) {
+                        layer.closeAll();
+                        if (data.returnNo.code == 200) {
+                            layer.msg("登录成功");
+                        }else {
+                            layer.msg(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
+                        }
+                    },
+                    error: function(data) {
+                        layer.closeAll();
+                        data = JSON.parse(data.responseText)
+                        layer.msg(data.data.join(','));
+                    }
+                });
+            })
+        })
+    </script>
+</html>

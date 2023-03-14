@@ -56,6 +56,7 @@
                         layer.closeAll();
                         if (data.returnNo.code == 200) {
                             layer.msg("登录成功");
+                            window.location.href = "/goods/list"
                         }else {
                             layer.msg(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
                         }

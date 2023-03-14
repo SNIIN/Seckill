@@ -6,6 +6,9 @@ import java.util.Date;
 
 @ToString
 public class User {
+    public static String getRedisKey(String token) {
+        return String.format("U%s", token);
+    }
     private Long userId;
 
     private String nickname;

@@ -1,5 +1,7 @@
 package cn.edu.xmu.seckill.controller;
 
+import cn.edu.xmu.seckill.config.annotation.SeckillUser;
+import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.seckill.entity.User;
 import cn.edu.xmu.seckill.service.IGoodsService;
 import cn.edu.xmu.seckill.utils.CookieUtil;
@@ -10,8 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,12 +32,19 @@ public class GoodsController {
     }
     @GetMapping("/list")
     public String goodsList(Model model,
-                            HttpServletRequest httpServletRequest,
-                            HttpServletResponse httpServletResponse) {
-        String token = CookieUtil.getCookieValue(httpServletRequest,"token");
-        User user = (User) redisTemplate.opsForValue().get(User.getRedisKey(token));
-        goodsService.getOnePageGoodsList(1);
+                            @SeckillUser User user) {
+        log.info(user.toString());
+        List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
+        model.addAttribute("goodsList", lst);
         model.addAttribute("userName", user.getNickname());
         return "goodsList";
+    }
+
+    @GetMapping("/detail")
+    public String goodsDetail(Model model, @RequestParam(value="seckillid") Long seckillId) {
+        SeckillGoodsVo vo = goodsService.getOneGoods(seckillId);
+        log.info(vo.toString());
+        model.addAttribute("goods", vo);
+        return "goodsDetail";
     }
 }

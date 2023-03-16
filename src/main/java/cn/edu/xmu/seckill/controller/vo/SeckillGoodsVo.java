@@ -18,7 +18,7 @@ public class SeckillGoodsVo{
     private String img;
     private String details;
     private BigDecimal seckillPrice;
-
+    private BigDecimal price;
     private Integer seckillStock;
 
     private Date beginTime;

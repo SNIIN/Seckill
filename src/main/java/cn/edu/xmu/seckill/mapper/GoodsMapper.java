@@ -26,4 +26,8 @@ public interface GoodsMapper {
     @Select("select sg.id as seckillId, g.*, sg.*" +
             " from t_goods g right join t_seckill_goods sg on g.id = sg.goods_id where sg.begin_time <= now() and sg.end_time >= now()")
     List<SeckillGoodsVo> selectSeckillGoodsVo();
+
+    @Select("select sg.id as seckillId, g.*, sg.*" +
+            " from t_goods g right join t_seckill_goods sg on g.id = sg.goods_id where sg.id = #{seckillId}")
+    SeckillGoodsVo selectSeckillGoodsVoById(Long seckillId);
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IGoodsService {
     public List<SeckillGoodsVo> getOnePageGoodsList(int page);
+
+    public SeckillGoodsVo getOneGoods(Long seckillId);
 }

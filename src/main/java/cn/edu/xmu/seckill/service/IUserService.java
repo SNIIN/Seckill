@@ -23,8 +23,8 @@ public interface IUserService {
 
     /**
      *
-     * @param userTicket
+     * @param token
      * @return
      */
-    User getUserByCookie(String userTicket);
+    User getUserByCookie(String token);
 }

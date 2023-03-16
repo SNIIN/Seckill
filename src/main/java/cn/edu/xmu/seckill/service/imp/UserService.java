@@ -54,8 +54,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserByCookie(String userTicket) {
-        return null;
+    public User getUserByCookie(String token) {
+        User user = (User) redisTemplate.opsForValue().get(User.getRedisKey(token));
+        return user;
     }
 
     private static final int TOKEN_LENGTH = 32; // 登录凭证长度为32个字符

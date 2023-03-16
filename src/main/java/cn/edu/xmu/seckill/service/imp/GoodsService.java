@@ -2,8 +2,10 @@ package cn.edu.xmu.seckill.service.imp;
 
 import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
+import cn.edu.xmu.seckill.exception.SeckillException;
 import cn.edu.xmu.seckill.mapper.GoodsMapper;
 import cn.edu.xmu.seckill.service.IGoodsService;
+import cn.edu.xmu.seckill.utils.ReturnNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,15 @@ public class GoodsService implements IGoodsService {
     @Override
     public List<SeckillGoodsVo> getOnePageGoodsList(int page) {
         List<SeckillGoodsVo> result = goodsMapper.selectSeckillGoodsVo();
-        result.forEach(i -> System.out.println(i.toString()));
-        return null;
+        return result;
+    }
+
+    @Override
+    public SeckillGoodsVo getOneGoods(Long seckillId) {
+        SeckillGoodsVo result = goodsMapper.selectSeckillGoodsVoById(seckillId);
+        if (null == result) {
+            throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
+        }
+        return result;
     }
 }

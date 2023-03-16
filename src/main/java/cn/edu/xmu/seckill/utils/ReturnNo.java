@@ -12,7 +12,9 @@ import lombok.ToString;
 public enum ReturnNo {
     SUCCESS(200, "成功"),
     ERROR(500, "服务端异常"),
-    LOGIN_ERROR(901, "手机号或密码不正确");
+    LOGIN_ERROR(901, "手机号或密码不正确"),
+    LOGIN_NON(902, "用户未登录"),
+    SECKILL_GOODS_NON(701, "秒杀商品不存在");
 
 
     private final Integer code;

@@ -50,11 +50,25 @@
         </javaClientGenerator>
 
         <!-- 指定数据库表 -->
-        <table tableName="t_user" domainObjectName="User" enableSelectByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableCountByExample="false">
+<!--        <table tableName="t_user" domainObjectName="User" enableSelectByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableCountByExample="false">-->
+<!--            &lt;!&ndash; 如果你想要重命名所有列，去掉一个公共前缀，你可以使用<columnRenamingRule>元素 &ndash;&gt;-->
+<!--            &lt;!&ndash; 如果你想要修改某个列的属性或者名称，你可以使用<columnOverride>元素 &ndash;&gt;-->
+<!--            <columnOverride column="id" property="userId" javaType="java.lang.Long"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_goods" domainObjectName="Goods" enableSelectByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableCountByExample="false">-->
+<!--            &lt;!&ndash; 如果你想要重命名所有列，去掉一个公共前缀，你可以使用<columnRenamingRule>元素 &ndash;&gt;-->
+<!--            &lt;!&ndash; 如果你想要修改某个列的属性或者名称，你可以使用<columnOverride>元素 &ndash;&gt;-->
+<!--            <columnOverride column="id" property="goodsId" javaType="java.lang.Long"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_order" domainObjectName="Order" enableSelectByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableCountByExample="false">-->
+<!--            &lt;!&ndash; 如果你想要重命名所有列，去掉一个公共前缀，你可以使用<columnRenamingRule>元素 &ndash;&gt;-->
+<!--            &lt;!&ndash; 如果你想要修改某个列的属性或者名称，你可以使用<columnOverride>元素 &ndash;&gt;-->
+<!--            <columnOverride column="id" property="orderId" javaType="java.lang.Long"/>-->
+<!--        </table>-->
+        <table tableName="t_seckill_goods" domainObjectName="SeckillGoods" enableSelectByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableCountByExample="false">
             <!-- 如果你想要重命名所有列，去掉一个公共前缀，你可以使用<columnRenamingRule>元素 -->
             <!-- 如果你想要修改某个列的属性或者名称，你可以使用<columnOverride>元素 -->
-            <columnOverride column="id" property="userId" javaType="java.lang.Long"/>
+            <columnOverride column="id" property="seckillId" javaType="java.lang.Long"/>
         </table>
-
     </context>
 </generatorConfiguration>

@@ -1,6 +1,7 @@
 package cn.edu.xmu.seckill.controller;
 
 import cn.edu.xmu.seckill.entity.User;
+import cn.edu.xmu.seckill.service.IGoodsService;
 import cn.edu.xmu.seckill.utils.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,18 @@ public class GoodsController {
 
     @Autowired
     RedisTemplate redisTemplate;
+    private final IGoodsService goodsService;
+    @Autowired
+    public GoodsController(IGoodsService goodsService) {
+        this.goodsService = goodsService;
+    }
     @GetMapping("/list")
     public String goodsList(Model model,
                             HttpServletRequest httpServletRequest,
                             HttpServletResponse httpServletResponse) {
         String token = CookieUtil.getCookieValue(httpServletRequest,"token");
         User user = (User) redisTemplate.opsForValue().get(User.getRedisKey(token));
-        log.info(user.toString());
+        goodsService.getOnePageGoodsList(1);
         model.addAttribute("userName", user.getNickname());
         return "goodsList";
     }

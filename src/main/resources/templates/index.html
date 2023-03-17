@@ -88,7 +88,7 @@
         <!-- Slides -->
         <div class="sp-slide main-slides">
             <div class="img-overlay"></div>
-            <img class="sp-image" th:src="@{/html/images/slider/slider/image1.jpg}" alt="Slider 1">
+            <img class="sp-image" th:src="@{/images/image1.jpg}" alt="Slider 1">
             <h1 class="sp-layer slider-text-big" data-position="center" data-show-transition="left"
                 data-hide-transition="right" data-show-delay="500" data-hide-delay="200">
                 <span class="highlight-texts">电子商城</span>
@@ -98,7 +98,7 @@
         <!-- Slides -->
         <div class="sp-slide main-slides">
             <div class="img-overlay"></div>
-            <img class="sp-image" th:src="@{/html/images/slider/slider/image2.jpg}" alt="Slider 2" />
+            <img class="sp-image" src="/images/image2.jpg" alt="Slider 2" />
             <h1 class="sp-layer slider-text-big" data-position="center" data-show-transition="left"
                 data-hide-transition="right" data-show-delay="500" data-hide-delay="200">
                 <span class="highlight-texts">在线秒杀</span>
@@ -109,9 +109,8 @@
         </div>
         <div class="sp-slide main-slides">
             <div class="img-overlay"></div>
-            <img class="sp-image" th:src="@{/html/images/slider/slider/image3.jpg}" alt="Slider 3" />
+            <img class="sp-image" th:src="@{/images/image3.jpg}" alt="Slider 3" />
         </div>
-        <!-- Slides End -->
     </div>
 </section>
 
@@ -139,61 +138,62 @@
                         display: block;
                     }
                 </style>
-                <div class="row">
+                <div class="row" th:each="">
                     <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
                         <div class="service-box">
+                            <img th:src="@{/img/iphone12.png}"></img>
                             <div class="icon">
-                                <i class="icon_piechart"></i>
-                                <a href="questionSerachToTest.html" class="h3">Go To Test</a>
+                                <a href="createTest_admin.html" class="h3">苹果12</a>
                             </div>
-                            <p>Testing includes diversified questions and major category</p>
+                            <p>商品信息</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
                         <div class="service-box">
+                            <img th:src="@{/img/iphone12.png}"></img>
                             <div class="icon">
-                                <i class="icon_desktop"></i>
-                                <a href="questionSerachToEdit.html" class="h3">Modify the question pool</a>
+                                <a href="createTest_admin.html" class="h3">苹果12</a>
                             </div>
-                            <p>Creat,Delete,Read,Update quesitions.Through this interface, you can modify the content of the question bank.</p>
+                            <p>商品信息</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
                         <div class="service-box">
+                            <img th:src="@{/img/iphone12.png}"></img>
                             <div class="icon">
-                                <i class="icon_piechart"></i>
-                                <a href="secretEditByStudent.html" class="h3">Change secret</a>
+                                <a href="createTest_admin.html" class="h3">苹果12</a>
                             </div>
-                            <p>Edit your account password through this interface.</p>
+                            <p>商品信息</p>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".1s">
                         <div class="service-box">
+                            <img th:src="@{/img/iphone12pro.png}"></img>
                             <div class="icon">
-                                <i class="icon_laptop"></i>
-                                <a href="createTestByStudent.html" class="h3">Manage tests</a>
+                                <a href="createTest_admin.html" class="h3">苹果12</a>
                             </div>
-                            <p>Student Can make manage tests through this interface</p>
+                            <p>商品信息</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".1s">
                         <div class="service-box">
+                            <img th:src="@{/img/iphone12pro.png}"></img>
                             <div class="icon">
-                                <i class="icon_image"></i>
-                                <a href="loginStudent.html" class="h3">Log in</a>
+                                <a href="createTest_admin.html" class="h3">苹果12</a>
                             </div>
-                            <p>Log in or register your studnet account right now.</p>
+                            <p>商品信息</p>
                         </div>
+
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".1s">
                         <div class="service-box">
+                            <img th:src="@{/img/iphone12pro.png}"></img>
                             <div class="icon">
-                                <i class="icon_laptop"></i>
-                                <a href="#team" class="h3">About us</a>
+                                <a href="createTest_admin.html" class="h3">苹果12</a>
                             </div>
-                            <p>Enter this interface to browse developer and project information</p>
+                            <p>商品信息</p>
                         </div>
                     </div>
                 </div>

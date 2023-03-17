@@ -534,10 +534,12 @@ section#services {
     display: inline-block;
 }
 .service-box {
-	padding: 25px;
+	padding: 93px;
 	border: 1px solid #e5e5e5;
-	margin-bottom: 30px;
+	margin-bottom: 86px;
+	margin-left: -10px;
 	background: #fff;
+	clear:both;
 }
 
 .section-wrapper{

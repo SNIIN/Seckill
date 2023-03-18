@@ -72,7 +72,7 @@
                     <li class="active">
                         <a href="#slider">主界面</a>
                     </li>
-                    <li><a href="login.html">账户登录</a>
+                    <li><a href="temp/login.html">账户登录</a>
                     </li>
                     <li>
                         <a href="#team">关于我们</a>
@@ -117,11 +117,8 @@
 <section id="services" class="section-wrapper">
     <div class="container">
         <div class="row">
-            <!-- Section Header -->
             <div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown">
                 <h2><span class="highlight-text">商品</span></h2>
-                <!--                    <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1"> This website provides the-->
-                <!--                        following features.</p>-->
             </div>
             <div class="our-services">
                 <style>
@@ -138,66 +135,21 @@
                         display: block;
                     }
                 </style>
-                <div class="row" th:each="">
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
-                        <div class="service-box">
-                            <img th:src="@{/img/iphone12.png}"></img>
-                            <div class="icon">
-                                <a href="createTest_admin.html" class="h3">苹果12</a>
-                            </div>
-                            <p>商品信息</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
-                        <div class="service-box">
-                            <img th:src="@{/img/iphone12.png}"></img>
-                            <div class="icon">
-                                <a href="createTest_admin.html" class="h3">苹果12</a>
-                            </div>
-                            <p>商品信息</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
-                        <div class="service-box">
-                            <img th:src="@{/img/iphone12.png}"></img>
-                            <div class="icon">
-                                <a href="createTest_admin.html" class="h3">苹果12</a>
-                            </div>
-                            <p>商品信息</p>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".1s">
+                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s" th:each="goods,goodsList:${goodsList}">
                         <div class="service-box">
-                            <img th:src="@{/img/iphone12pro.png}"></img>
                             <div class="icon">
-                                <a href="createTest_admin.html" class="h3">苹果12</a>
+                                    <ul class="h3" th:text="${goods.name}"></ul>
+                                    <ul><img th:src="'/goodsimg/'+${goods.img}" width="180" height="160"/></ul>
+                                    <ul class="h5" th:text="'价格为：'+ ${goods.price}"></ul>
+                                    <ul style="color: #be0a34" class="h5" th:text="'秒杀价为：' + ${goods.seckillPrice}"></ul>
+                                    <span style="color: #be0a34" class="h5" th:text="'秒杀还剩余：'+ ${goods.seckillStock}"></span>
+                                    <ul style="color: #0abe13"><a class="h5" th:href="'/goods/detail?seckillid='+ ${goods.seckillId}">详情</a></ul>
                             </div>
-                            <p>商品信息</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".1s">
-                        <div class="service-box">
-                            <img th:src="@{/img/iphone12pro.png}"></img>
-                            <div class="icon">
-                                <a href="createTest_admin.html" class="h3">苹果12</a>
-                            </div>
-                            <p>商品信息</p>
-                        </div>
-
-                    </div>
-                    <div class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".1s">
-                        <div class="service-box">
-                            <img th:src="@{/img/iphone12pro.png}"></img>
-                            <div class="icon">
-                                <a href="createTest_admin.html" class="h3">苹果12</a>
-                            </div>
-                            <p>商品信息</p>
                         </div>
                     </div>
                 </div>
-            </div>
+           </div>
         </div>
     </div>
 </section>

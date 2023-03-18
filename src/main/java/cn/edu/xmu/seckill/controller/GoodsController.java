@@ -37,7 +37,7 @@ public class GoodsController {
         List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
         model.addAttribute("goodsList", lst);
         model.addAttribute("userName", user.getNickname());
-        return "goodsList";
+        return "index";
     }
 
     @GetMapping("/detail")

@@ -457,7 +457,7 @@
       success:function (data) {
         if(data.returnNo.code===200){
           vmForAll.messageBox('success','登录成功')
-          setTimeout("window.location.href= '/goods/index'",500)
+          setTimeout("window.location.href= '/goods/list'",500)
         }else {
           $('#user_info').html(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
         }

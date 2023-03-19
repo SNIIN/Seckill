@@ -29,7 +29,7 @@ public class SeckillController {
      * @param seckillId
      * @return
      */
-    @PostMapping("/{seckillId}")
+    @PostMapping(value = "/{seckillId}", produces = "text/html;charset=UTF-8")
     public String doSeckill(Model model, @SeckillUser User user, @PathVariable Long seckillId) {
         Order order = seckillService.doSeckill(user, seckillId);
         log.info(order.toString());

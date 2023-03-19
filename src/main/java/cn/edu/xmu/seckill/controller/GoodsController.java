@@ -30,7 +30,7 @@ public class GoodsController {
     public GoodsController(IGoodsService goodsService) {
         this.goodsService = goodsService;
     }
-    @GetMapping("/list")
+    @GetMapping(value = "/list", produces = "text/html;charset=UTF-8")
     public String goodsList(Model model,
                             @SeckillUser User user) {
         log.info(user.toString());
@@ -40,7 +40,7 @@ public class GoodsController {
         return "index";
     }
 
-    @GetMapping("/detail")
+    @GetMapping(value = "/detail", produces = "text/html;charset=UTF-8")
     public String goodsDetail(Model model, @RequestParam(value="seckillid") Long seckillId) {
         SeckillGoodsVo vo = goodsService.getOneSeckillGoods(seckillId);
         log.info(vo.toString());

@@ -34,7 +34,7 @@ public class LoginController {
         this.userService = userService;
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login", produces = "text/html;charset=UTF-8")
     public String login(Model model) {
         return "login";
     }
@@ -44,7 +44,7 @@ public class LoginController {
         return "index";
     }
 
-    @PostMapping("/dologin")
+    @PostMapping(value = "/dologin", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public ReturnObject doLogin(@Valid @RequestBody LoginVo loginVo,
                                 HttpServletRequest httpServletRequest,
@@ -52,5 +52,6 @@ public class LoginController {
         logger.info(loginVo.toString());
         return userService.doLogin(loginVo, httpServletRequest, httpServletResponse);
     }
+
 
 }

@@ -80,7 +80,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.11</version>
+            <version>5.1.38</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -97,39 +97,39 @@
     <build>
         <plugins>
             <!-- mybatis-generator-->
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <executions>
-                    <execution>
-                        <id>Generate MyBatis Artifacts</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>8.0.11</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.mybatis.generator</groupId>
-                        <artifactId>mybatis-generator-core</artifactId>
-                        <version>1.4.0</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <!-- 输出详细信息 -->
-                    <verbose>true</verbose>
-                    <!-- 覆盖生成文件 -->
-                    <overwrite>true</overwrite>
-                    <!-- 定义配置文件 -->
-                    <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.mybatis.generator</groupId>-->
+<!--                <artifactId>mybatis-generator-maven-plugin</artifactId>-->
+<!--                <version>1.4.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>Generate MyBatis Artifacts</id>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>mysql</groupId>-->
+<!--                        <artifactId>mysql-connector-java</artifactId>-->
+<!--                        <version>8.0.11</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.mybatis.generator</groupId>-->
+<!--                        <artifactId>mybatis-generator-core</artifactId>-->
+<!--                        <version>1.4.0</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--                <configuration>-->
+<!--                    &lt;!&ndash; 输出详细信息 &ndash;&gt;-->
+<!--                    <verbose>true</verbose>-->
+<!--                    &lt;!&ndash; 覆盖生成文件 &ndash;&gt;-->
+<!--                    <overwrite>true</overwrite>-->
+<!--                    &lt;!&ndash; 定义配置文件 &ndash;&gt;-->
+<!--                    <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -110,12 +110,14 @@
                             </div>
                             <form action="#" class="form-box" style="width: 200%;margin-left: -100%">
                                 <div class="row">
-                                    <h2>秒杀进行中</h2>
-                                    <ul class="h5" th:text="'价格为：'+ ${goods.price}"></ul>
-                                    <ul style="color: #be0a34" class="h5" th:text="'秒杀价为：' + ${goods.seckillPrice}"></ul>
-                                    <span style="color: #be0a34" class="h5" th:text="'秒杀还剩余：'+ ${goods.seckillStock}"></span>
+<!--                                    <h2>秒杀进行中</h2>-->
+                                    <ul class="h5" th:text="'订单号为：'+ ${orderNum}"></ul>
+                                    <ul class="h5" th:text="'下单时间：'+ ${payTime}"></ul>
+                                    <ul class="h5" th:text="'支付方式：未支付'"></ul>
+                                    <ul class="h5" th:text="'支付金额：'+ ${goods.seckillPrice}"></ul>
                                     <div class="col-12 text-center" style="margin-top: 5%">
-                                        <input id="submitQuestion" type="submit" value="立即秒杀" class="btn btn-primary btn-lg fs-5">
+                                        <a class="h5" th:href="'/goods/list'"><input id="buyButton" type="button" value="返回首页" class="btn btn-primary btn-lg fs-5"></a>
+                                        <!--                                        <input width="100px" type="hidden" name="goodsId" id="info" th:text = "${goods.seckillId}">-->
                                     </div>
                                 </div>
                             </form>

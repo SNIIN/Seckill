@@ -1,11 +1,15 @@
 package cn.edu.xmu.seckill.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @ToString
+@Builder
+@AllArgsConstructor
 public class Order {
     private Long orderId;
 

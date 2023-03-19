@@ -1,10 +1,14 @@
 package cn.edu.xmu.seckill.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.ToString;
 
 import java.math.BigDecimal;
 
 @ToString
+@Builder
+@AllArgsConstructor
 public class Goods {
     private Long goodsId;
 

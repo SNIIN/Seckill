@@ -14,7 +14,9 @@ public enum ReturnNo {
     ERROR(500, "服务端异常"),
     LOGIN_ERROR(901, "手机号或密码不正确"),
     LOGIN_NON(902, "用户未登录"),
-    SECKILL_GOODS_NON(701, "秒杀商品不存在");
+    SECKILL_GOODS_NON(701, "秒杀商品不存在"),
+    SECKILL_GOODS_NOT_REST(702, "秒杀商品库存不足"),
+    SECKILL_GOODS_USER_REPEAT(703, "秒杀商品每人限购一件");
 
 
     private final Integer code;

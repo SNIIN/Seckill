@@ -5,7 +5,7 @@ import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
 import java.util.List;
 
 public interface IGoodsService {
-    public List<SeckillGoodsVo> getOnePageGoodsList(int page);
+    List<SeckillGoodsVo> getOnePageGoodsList(int page);
 
-    public SeckillGoodsVo getOneGoods(Long seckillId);
+    SeckillGoodsVo getOneSeckillGoods(Long seckillId);
 }

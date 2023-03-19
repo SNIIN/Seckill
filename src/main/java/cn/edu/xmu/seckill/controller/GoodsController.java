@@ -42,7 +42,7 @@ public class GoodsController {
 
     @GetMapping("/detail")
     public String goodsDetail(Model model, @RequestParam(value="seckillid") Long seckillId) {
-        SeckillGoodsVo vo = goodsService.getOneGoods(seckillId);
+        SeckillGoodsVo vo = goodsService.getOneSeckillGoods(seckillId);
         log.info(vo.toString());
         model.addAttribute("goods", vo);
         return "goodsDetail";

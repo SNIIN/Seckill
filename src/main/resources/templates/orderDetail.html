@@ -56,6 +56,12 @@
         }
 
     </style>
+    <script th:inline="javascript">
+        function test() {
+            return "heello";
+        };
+
+    </script>
 </head>
 
 <body id="all">
@@ -102,19 +108,19 @@
                         <div class="row" style="width: 80%;margin-left: 3rem">
                             <div style="margin-left: 17%" class="col-md-4 col-sm-4 col-xs-12 text-xs-center wow fadeInDown" data-wow-delay=".2s">
                                 <div class="service-box" style="padding: 6px;margin-bottom: 128px;margin-left: -70px">
-                                    <img th:src="'/goodsimg/'+${goods.img}" width="300" height="300">
+                                    <img th:src="'/goodsimg/'+${order.img}" width="300" height="300">
                                     <div>
-                                        <span class="h5" th:text="${goods.title}"></span>
+                                        <span class="h5" th:text="${order.title}"></span>
                                     </div>
                                 </div>
                             </div>
                             <form action="#" class="form-box" style="width: 200%;margin-left: -100%">
                                 <div class="row">
 <!--                                    <h2>秒杀进行中</h2>-->
-                                    <ul class="h5" th:text="'订单号为：'+ ${orderNum}"></ul>
-                                    <ul class="h5" th:text="'下单时间：'+ ${payTime}"></ul>
+                                    <ul class="h5" th:text="'订单号为：'+ ${order.orderNum}"></ul>
+                                    <ul class="h5" th:text="'下单时间：'+ ${#dates.format(order.createDate, 'yyyy年MM月dd日 HH点mm分ss秒')}" ></ul>
                                     <ul class="h5" th:text="'支付方式：未支付'"></ul>
-                                    <ul class="h5" th:text="'支付金额：'+ ${goods.seckillPrice}"></ul>
+                                    <ul class="h5" th:text="'支付金额：'+ ${order.seckillPrice}"></ul>
                                     <div class="col-12 text-center" style="margin-top: 5%">
                                         <a class="h5" th:href="'/goods/list'"><input id="buyButton" type="button" value="返回首页" class="btn btn-primary btn-lg fs-5"></a>
                                         <!--                                        <input width="100px" type="hidden" name="goodsId" id="info" th:text = "${goods.seckillId}">-->

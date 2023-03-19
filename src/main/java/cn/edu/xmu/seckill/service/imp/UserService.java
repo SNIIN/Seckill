@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService implements IUserService {
@@ -48,7 +49,7 @@ public class UserService implements IUserService {
         }
         // 生成登录凭证，存入cookie中
         String token = generateLoginToken();
-        redisTemplate.opsForValue().set(user.getRedisKey(token), user);
+        redisTemplate.opsForValue().set(user.getRedisKey(token), user, 30, TimeUnit.MINUTES);
         CookieUtil.setCookieValue(httpServletRequest, httpServletResponse, "token", token);
         return new ReturnObject(ReturnNo.SUCCESS);
     }

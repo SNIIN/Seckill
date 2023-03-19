@@ -2,6 +2,7 @@ package cn.edu.xmu.seckill.service.imp;
 
 import cn.edu.xmu.seckill.config.annotation.SeckillUser;
 import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
+import cn.edu.xmu.seckill.controller.vo.SeckillOrderVo;
 import cn.edu.xmu.seckill.entity.Goods;
 import cn.edu.xmu.seckill.entity.Order;
 import cn.edu.xmu.seckill.entity.User;
@@ -44,6 +45,15 @@ public class SeckillService implements ISeckillService {
                 .status((byte) 0).build();
         orderMapper.insert(order);
         seckillGoodsMapper.updateBySeckillStockAndSeckillId(goods.getSeckillStock()-1, seckillId);
+        return order;
+    }
+
+    @Override
+    public SeckillOrderVo getSeckillOrder(Long orderId) {
+        SeckillOrderVo order = orderMapper.selectSeckillOrderByOrderId(orderId);
+        if (null == orderMapper) {
+            throw new SeckillException(ReturnNo.SECKILL_ORDER_NON);
+        }
         return order;
     }
 }

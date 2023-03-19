@@ -16,7 +16,8 @@ public enum ReturnNo {
     LOGIN_NON(902, "用户未登录"),
     SECKILL_GOODS_NON(701, "秒杀商品不存在"),
     SECKILL_GOODS_NOT_REST(702, "秒杀商品库存不足"),
-    SECKILL_GOODS_USER_REPEAT(703, "秒杀商品每人限购一件");
+    SECKILL_GOODS_USER_REPEAT(703, "秒杀商品每人限购一件"),
+    SECKILL_ORDER_NON(801, "秒杀订单不存在");
 
 
     private final Integer code;

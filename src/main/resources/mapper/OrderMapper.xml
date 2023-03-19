@@ -28,15 +28,18 @@
     delete from t_order
     where id = #{orderId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="cn.edu.xmu.seckill.entity.Order">
-    insert into t_order (id, user_id, goods_id, 
-      goods_name, goods_price, goods_count, 
-      channel, status, delivery_addr_id, 
-      create_date, pay_date)
-    values (#{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, 
-      #{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{goodsCount,jdbcType=INTEGER}, 
-      #{channel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{deliveryAddrId,jdbcType=BIGINT}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="cn.edu.xmu.seckill.entity.Order" useGeneratedKeys="true" keyProperty="orderId">
+    <selectKey keyProperty="orderId" order="BEFORE" resultType="java.lang.Long">
+      select auto_increment from information_schema.TABLES where table_name='t_order' and table_schema = DATABASE()
+    </selectKey>
+    insert into t_order (user_id, goods_id,
+    goods_name, goods_price, goods_count,
+    channel, status, delivery_addr_id,
+    create_date, pay_date)
+    values (#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},
+    #{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{goodsCount,jdbcType=INTEGER},
+    #{channel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{deliveryAddrId,jdbcType=BIGINT},
+    #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.xmu.seckill.entity.Order">
     insert into t_order

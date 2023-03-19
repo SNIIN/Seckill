@@ -1,17 +1,20 @@
 package cn.edu.xmu.seckill.controller;
 
 import cn.edu.xmu.seckill.config.annotation.SeckillUser;
+import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
+import cn.edu.xmu.seckill.controller.vo.SeckillOrderVo;
 import cn.edu.xmu.seckill.entity.Order;
 import cn.edu.xmu.seckill.entity.User;
 import cn.edu.xmu.seckill.service.ISeckillService;
 import cn.edu.xmu.seckill.service.imp.SeckillService;
+import cn.edu.xmu.seckill.utils.ReturnNo;
+import cn.edu.xmu.seckill.utils.ReturnObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/seckill")
@@ -29,12 +32,20 @@ public class SeckillController {
      * @param seckillId
      * @return
      */
-    @PostMapping(value = "/{seckillId}", produces = "text/html;charset=UTF-8")
-    public String doSeckill(Model model, @SeckillUser User user, @PathVariable Long seckillId) {
+    @PostMapping(value = "/{seckillid}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public ReturnObject doSeckill(@SeckillUser User user, @PathVariable("seckillid") Long seckillId) {
         Order order = seckillService.doSeckill(user, seckillId);
         log.info(order.toString());
+        return new ReturnObject(ReturnNo.SUCCESS, "创建成功", order.getOrderId());
+    }
+
+    @GetMapping(value = "/order/{orderid}", produces = "text/html;charset=UTF-8")
+    public String getOrder(Model model, @SeckillUser User user, @PathVariable("orderid") Long orderId) {
+        SeckillOrderVo order = seckillService.getSeckillOrder(orderId);
+        log.info(order.toString());
         model.addAttribute("order", order);
-        model.addAttribute("userName", user.getNickname());
         return "orderDetail";
     }
 }

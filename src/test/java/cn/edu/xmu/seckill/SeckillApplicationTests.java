@@ -34,7 +34,7 @@ class SeckillApplicationTests {
         // 默认数据库所有user明文密码为123456， 前端加盐方式相同
         lst.forEach(i -> {
             try {
-                writer.write(userService.loginForJmeter(i.getUserId(), "90aeaad535749f0a6cb8d685e7493dd0"));
+                writer.write(User.getRedisKey(userService.loginForJmeter(i.getUserId(), "90aeaad535749f0a6cb8d685e7493dd0")));
                 writer.newLine();
             } catch (IOException e) {
                 throw new RuntimeException(e);

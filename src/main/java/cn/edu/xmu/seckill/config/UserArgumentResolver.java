@@ -6,6 +6,7 @@ import cn.edu.xmu.seckill.exception.SeckillException;
 import cn.edu.xmu.seckill.service.IUserService;
 import cn.edu.xmu.seckill.utils.CookieUtil;
 import cn.edu.xmu.seckill.utils.ReturnNo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -18,6 +19,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
+@Slf4j
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final IUserService userService;

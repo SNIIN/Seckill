@@ -27,7 +27,7 @@ class SeckillApplicationTests {
 
     @Test
     void generateTestUsersForJmeter() throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("data.csv"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(".\\jmeter\\data.csv"));
         List<User> lst = userMapper.selectAllUsers();
         writer.write("token");
         writer.newLine();

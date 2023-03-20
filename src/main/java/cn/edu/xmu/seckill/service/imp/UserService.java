@@ -60,6 +60,25 @@ public class UserService implements IUserService {
         return user;
     }
 
+    /**
+     * 仅用于jmter测试的登录，传入账号密码，登录返回token
+     * @param userId
+     * @param password
+     * @return
+     */
+    public String loginForJmeter(Long userId, String password) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (null == user) {
+            throw new SeckillException(ReturnNo.LOGIN_ERROR);
+        }
+        if (!MD5Util.backToDb(password, user.getSalt()).equals(user.getPassword())) {
+            throw new SeckillException(ReturnNo.LOGIN_ERROR);
+        }
+        String token = generateLoginToken();
+        redisTemplate.opsForValue().set(user.getRedisKey(token), user, 30, TimeUnit.MINUTES);
+        return token;
+    }
+
     private static final int TOKEN_LENGTH = 32; // 登录凭证长度为32个字符
 
     // 生成一个随机的登录凭证

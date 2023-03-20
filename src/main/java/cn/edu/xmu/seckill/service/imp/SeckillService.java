@@ -51,7 +51,7 @@ public class SeckillService implements ISeckillService {
     @Override
     public SeckillOrderVo getSeckillOrder(Long orderId) {
         SeckillOrderVo order = orderMapper.selectSeckillOrderByOrderId(orderId);
-        if (null == orderMapper) {
+        if (null == order) {
             throw new SeckillException(ReturnNo.SECKILL_ORDER_NON);
         }
         return order;

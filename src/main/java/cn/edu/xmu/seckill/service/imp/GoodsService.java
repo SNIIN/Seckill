@@ -33,7 +33,7 @@ public class GoodsService implements IGoodsService {
 
     @Override
     public SeckillGoodsVo getOneSeckillGoods(Long seckillId) {
-        SeckillGoodsVo result = goodsMapper.selectSeckillGoodsVoById(seckillId);
+        SeckillGoodsVo result = goodsMapper.selectSeckillGoodsVoByIdForUpdate(seckillId);
         if (null == result) {
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
         }

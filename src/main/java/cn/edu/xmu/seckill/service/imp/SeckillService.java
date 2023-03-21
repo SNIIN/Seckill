@@ -15,6 +15,8 @@ import cn.edu.xmu.seckill.service.ISeckillService;
 import cn.edu.xmu.seckill.utils.ReturnNo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -32,6 +34,7 @@ public class SeckillService implements ISeckillService {
     }
 
     @Override
+    @Transactional
     public Order doSeckill(User user, Long seckillId) {
         SeckillGoodsVo goods = goodsService.getOneSeckillGoods(seckillId);
         if (0 >= goods.getSeckillStock()) {

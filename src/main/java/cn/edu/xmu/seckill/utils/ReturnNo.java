@@ -17,6 +17,7 @@ public enum ReturnNo {
     SECKILL_GOODS_NON(701, "秒杀商品不存在"),
     SECKILL_GOODS_NOT_REST(702, "秒杀商品库存不足"),
     SECKILL_GOODS_USER_REPEAT(703, "秒杀商品每人限购一件"),
+    SECKILL_GOODS_NOT_EXIST(704, "商品未处于秒杀活动中"),
     SECKILL_ORDER_NON(801, "秒杀订单不存在");
 
 

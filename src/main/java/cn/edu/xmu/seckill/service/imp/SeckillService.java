@@ -40,6 +40,10 @@ public class SeckillService implements ISeckillService {
         if (null != orderMapper.selectByGoodsIdAndUserId(goods.getGoodsId(), user.getUserId())) {
             throw new SeckillException(ReturnNo.SECKILL_GOODS_USER_REPEAT);
         }
+        Date now = new Date();
+        if (!(now.after(goods.getBeginTime()) && now.before(goods.getEndTime()))) {
+            throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_EXIST);
+        }
         Order order = Order.builder().goodsCount(1).goodsId(goods.getGoodsId()).goodsName(goods.getName())
                 .userId(user.getUserId()).channel((byte) 0).goodsPrice(goods.getSeckillPrice()).createDate(new Date())
                 .status((byte) 0).build();

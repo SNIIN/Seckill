@@ -91,4 +91,10 @@ public class GoodsController {
         List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
         return new ReturnObject(ReturnNo.SUCCESS,lst);
     }
+    @GetMapping (value = "/gdetail", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public ReturnObject getdetail(@RequestParam(value="seckillid") Long seckillId) {
+        SeckillGoodsVo vo = goodsService.getOneSeckillGoods(seckillId);
+        return new ReturnObject(ReturnNo.SUCCESS,vo);
+    }
 }

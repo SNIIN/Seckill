@@ -40,12 +40,18 @@ public class SeckillController {
         log.info(order.toString());
         return new ReturnObject(ReturnNo.SUCCESS, "创建成功", order.getOrderId());
     }
-
-    @GetMapping(value = "/order/{orderid}", produces = "text/html;charset=UTF-8")
-    public String getOrder(Model model, @SeckillUser User user, @PathVariable("orderid") Long orderId) {
+    @GetMapping(value = "/order/{orderId}", produces = "text/html;charset=UTF-8")
+    public String getOrder(Model model, @SeckillUser User user, @PathVariable("orderId") Long orderId) {
         SeckillOrderVo order = seckillService.getSeckillOrder(orderId);
         log.info(order.toString());
         model.addAttribute("order", order);
         return "orderDetail";
+    }
+    @GetMapping (value = "/gorder", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public ReturnObject getmyOrder( @SeckillUser User user,@RequestParam(value="orderId") Long orderId) {
+        SeckillOrderVo order = seckillService.getSeckillOrder(orderId);
+        log.info(order.toString());
+        return new ReturnObject(ReturnNo.SUCCESS,order);
     }
 }

@@ -41,6 +41,7 @@
     <script th:src="@{/html/js/jquery.sliderPro.min.js}"></script>
     <script th:src="@{/html/js/owl.carousel.min.js}"></script>
     <script th:src="@{/html/js/custom.js}"></script>
+
     <!-- 使用layer弹窗 -->
     <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.1.1/layer.js"></script>
     <style>
@@ -118,7 +119,6 @@
                                     <span style="color: #be0a34" class="h5" th:text="'秒杀还剩余：'+ ${goods.seckillStock}"></span>
                                     <div class="col-12 text-center" style="margin-top: 5%">
                                         <input id="buyButton" type="button" value="开始秒杀" class="btn btn-primary btn-lg fs-5">
-<!--                                        <input width="100px" type="hidden" name="goodsId" id="info" th:text = "${goods.seckillId}">-->
                                     </div>
                                 </div>
                             </form>

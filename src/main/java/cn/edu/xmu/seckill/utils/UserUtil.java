@@ -13,29 +13,14 @@ public class UserUtil {
         List<User> users = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             User user = new User();
-            user.setUserId(1300000000L+i);
+            user.setUserId(13000000000L+i);
             user.setNickname("user"+i);
             user.setSalt("1251552222");
-            user.setPassword(MD5Util.backToDb("12300aaa",user.getSalt()));
+            user.setPassword("fa71e2d73df73b4c18f85d3c6d302a71");//密码为12300aaa的md5加密
             users.add(user);
         }
         return users;
     }
 
-    public static String getRandomNickname(int length) {
-        String val = "";
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            val += String.valueOf(random.nextInt(10));
-        }
-        return val;
-    }
-
-    public static String getPayTime(){
-        LocalDateTime nowDateTime = LocalDateTime.now();
-        System.out.println(nowDateTime);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return nowDateTime.format(dateTimeFormatter);
-    }
 
 }

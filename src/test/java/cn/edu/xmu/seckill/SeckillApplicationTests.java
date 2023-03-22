@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 @SpringBootTest
@@ -25,7 +23,7 @@ class SeckillApplicationTests {
     void contextLoads() {
     }
 
-    @Test
+//    @Test
     void generateTestUsersForJmeter() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(".\\jmeter\\data.csv"));
         List<User> lst = userMapper.selectAllUsers();
@@ -43,12 +41,42 @@ class SeckillApplicationTests {
         writer.close();
     }
 
-    @Test
-    void addUser(){
-        List<User> users = UserUtil.creater(100);
+    //@Test
+    List<User> addUser(int num){
+        List<User> users = UserUtil.creater(num);
         for (User user:users) {
             userMapper.insert(user);
         }
+        return users;
     }
+
+   // @Test
+    void generateUserText() throws IOException {
+        List<User> users =  addUser(10000);
+        String path = "C:\\Users\\fly\\IdeaProjects\\Seckill\\user.txt";
+        BufferedWriter out = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(path,true)));
+        for (User user:users) {
+            String info = user.getUserId()+",09c1a241041b801e2aa25c1b3b615297";
+            out.write(info);
+            out.write("\n");
+        }
+        out.close();
+    }
+
+    @Test
+    void generateTokenText() throws IOException {
+        List<User> users = userMapper.selectAllUsers();
+        String path = "C:\\Users\\fly\\IdeaProjects\\Seckill\\token.txt";
+        BufferedWriter out = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(path,true)));
+        for (User user:users) {
+            String info =  userService.loginForJmeter(user.getUserId(), "09c1a241041b801e2aa25c1b3b615297");
+            out.write("token,"+info);
+            out.write("\n");
+        }
+        out.close();
+    }
+
 
 }

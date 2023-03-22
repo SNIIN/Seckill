@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80030
 File Encoding         : 65001
 
-Date: 2023-03-15 12:58:50
+Date: 2023-03-22 11:46:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,8 +32,8 @@ CREATE TABLE `t_order` (
   `create_date` datetime DEFAULT NULL COMMENT '订单创建时间',
   `pay_date` datetime DEFAULT NULL COMMENT '订单支付时间',
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
+  UNIQUE KEY `user_goods` (`user_id`,`goods_id`) USING BTREE,
   KEY `goods_id` (`goods_id`),
   CONSTRAINT `t_order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `t_order_ibfk_2` FOREIGN KEY (`goods_id`) REFERENCES `t_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37166 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

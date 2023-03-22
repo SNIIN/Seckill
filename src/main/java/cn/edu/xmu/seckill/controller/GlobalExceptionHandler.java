@@ -40,4 +40,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().header("Content-Type", "application/json; charset=utf-8").body(new ReturnObject(ex.getReturnNo(), "", errors));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleExceptions(
+            Exception ex) {
+        return ResponseEntity.badRequest().header("Content-Type", "application/json; charset=utf-8").body(new ReturnObject(ReturnNo.ERROR, "", "出现了些错误"));
+    }
+
 }

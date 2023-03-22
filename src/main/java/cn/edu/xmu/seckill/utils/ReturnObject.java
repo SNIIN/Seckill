@@ -21,5 +21,9 @@ public class ReturnObject {
     public ReturnObject(ReturnNo returnNo) {
         this.returnNo = returnNo;
     }
+    public ReturnObject(ReturnNo returnNo,Object data) {
+        this.returnNo = returnNo;
+        this.data = data;
+    }
 
 }

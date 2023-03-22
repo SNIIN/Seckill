@@ -1,10 +1,13 @@
 package cn.edu.xmu.seckill.controller;
 
 import cn.edu.xmu.seckill.config.annotation.SeckillUser;
+import cn.edu.xmu.seckill.controller.vo.LoginVo;
 import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.seckill.entity.User;
 import cn.edu.xmu.seckill.service.IGoodsService;
 import cn.edu.xmu.seckill.utils.CookieUtil;
+import cn.edu.xmu.seckill.utils.ReturnNo;
+import cn.edu.xmu.seckill.utils.ReturnObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/goods")
@@ -79,5 +83,12 @@ public class GoodsController {
             return "goodsDetail";
         }
         return html;
+    }
+
+    @GetMapping (value = "/glist", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public ReturnObject getlist(@SeckillUser User user) {
+        List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
+        return new ReturnObject(ReturnNo.SUCCESS,lst);
     }
 }

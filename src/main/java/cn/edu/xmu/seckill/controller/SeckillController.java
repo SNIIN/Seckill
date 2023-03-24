@@ -5,16 +5,22 @@ import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.seckill.controller.vo.SeckillOrderVo;
 import cn.edu.xmu.seckill.entity.Order;
 import cn.edu.xmu.seckill.entity.User;
+import cn.edu.xmu.seckill.rabbitMq.MQSender;
+import cn.edu.xmu.seckill.service.IGoodsService;
 import cn.edu.xmu.seckill.service.ISeckillService;
-import cn.edu.xmu.seckill.service.imp.SeckillService;
 import cn.edu.xmu.seckill.utils.ReturnNo;
 import cn.edu.xmu.seckill.utils.ReturnObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/seckill")
@@ -22,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class SeckillController {
 
     private final ISeckillService seckillService;
+
     @Autowired
     public SeckillController(ISeckillService seckillService) {
         this.seckillService = seckillService;
@@ -32,14 +39,19 @@ public class SeckillController {
      * @param seckillId
      * @return
      */
-    @PostMapping(value = "/{seckillid}", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/{seckillId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ReturnObject doSeckill(@SeckillUser User user, @PathVariable("seckillid") Long seckillId) {
-        Order order = seckillService.doSeckill(user, seckillId);
-        log.info(order.toString());
-        return new ReturnObject(ReturnNo.SUCCESS, "创建成功", order.getOrderId());
+    public ReturnObject doSeckill(@SeckillUser User user, @PathVariable("seckillId") Long seckillId) {
+        return seckillService.doSeckill(user, seckillId);
     }
+    @GetMapping (value = "/result/{seckillId}", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public ReturnObject getResult( @SeckillUser User user,@PathVariable(value="seckillId") Long seckillId) {
+        Long status = seckillService.getOrderStatus(user, seckillId);
+        return new ReturnObject(ReturnNo.SUCCESS,status);
+    }
+
     @GetMapping(value = "/order/{orderId}", produces = "text/html;charset=UTF-8")
     public String getOrder(Model model, @SeckillUser User user, @PathVariable("orderId") Long orderId) {
         SeckillOrderVo order = seckillService.getSeckillOrder(orderId);

@@ -163,13 +163,15 @@
                 type: "POST",
                 contentType: "application/json;charset=utf-8",
                 success: function(data) {
-                    layer.closeAll();
-                    if (data.returnNo.code == 200) {
-                        layer.msg("秒杀成功");
+                    // layer.closeAll();
+                    if (data.returnNo.code == 705) {
+                        // layer.msg("正在秒杀");
                         console.log(data)
-                        window.location.href = "orderDetail1.html?orderId="+data.data;
+                        getResult(seckillId)
+                        // window.location.href = "orderDetail1.html?orderId="+data.data;
                     }else {
-                        layer.msg(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
+                        console.log(data)
+                        layer.msg(data.returnNo.message+"\n失败了:"+data.specMessage);
                     }
                 },
                 error: function(data) {
@@ -179,7 +181,43 @@
                 }
             });
         })
+
     })
+    function getResult(seckillId){
+        console.log("请求中")
+        g_showLoading();
+        $.ajax({
+            url: `/seckill/result/${seckillId}`,
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            success: function(data) {
+                if (data.returnNo.code == 200) {
+                    console.log(data)
+                    if (data.data<0){
+                        layer.msg("对不起，没抢到")
+                    }else if (data.data==0){
+                        setTimeout(function () {
+                            getResult(seckillId)
+                        },1000)
+                    }else{
+                        layer.confirm("秒杀成功,是否查看订单",{btn:["确定", "取消"]},
+                            function () {
+                                window.location.href="orderDetail1.html?orderId="+data.data;
+                            },
+                            function() {
+                                layer.close();
+                            })
+                    }
+                    // window.location.href = "orderDetail1.html?orderId="+data.data;
+                }else {
+                    layer.msg(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
+                }
+            },
+            error: function(data) {
+                layer.msg("客户端请求错误");
+            }
+        });
+    }
 
 </script>
 </body>

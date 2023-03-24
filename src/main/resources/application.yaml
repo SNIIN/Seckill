@@ -3,7 +3,20 @@ spring:
     host: 175.178.162.60
     port: 6379
     password: 123456
-
+  rabbitmq:
+    host: 175.178.162.60
+    username: rabbitmq
+    password: 12300aaa
+    virtual-host: /
+    port: 5673
+    listener:
+      simple:
+        auto-startup: true
+        default-requeue-rejected: true
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
   thymeleaf:
     cache: false
 

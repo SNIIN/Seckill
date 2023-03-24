@@ -87,7 +87,7 @@ public class GoodsController {
 
     @GetMapping (value = "/glist", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public ReturnObject getlist(@SeckillUser User user) {
+     public ReturnObject getlist(@SeckillUser User user) {
         List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
         return new ReturnObject(ReturnNo.SUCCESS,lst);
     }

@@ -1,11 +1,13 @@
 package cn.edu.xmu.seckill.service;
 
 import cn.edu.xmu.seckill.controller.vo.SeckillOrderVo;
-import cn.edu.xmu.seckill.entity.Order;
 import cn.edu.xmu.seckill.entity.User;
+import cn.edu.xmu.seckill.utils.ReturnObject;
 
 public interface ISeckillService {
-    Order doSeckill(User ser, Long seckillId);
+    ReturnObject doSeckill(User ser, Long seckillId);
 
     SeckillOrderVo getSeckillOrder(Long orderId);
+
+    Long getOrderStatus(User uer,Long goodsId);
 }

@@ -14,7 +14,6 @@ public class RabbitMqConfig {
 
     private static final String QUEUE = "seckillQueue";
     private static final String EXCHANGE = "seckillExchange";
-
     @Bean
     public Queue queue(){
         return new Queue(QUEUE);

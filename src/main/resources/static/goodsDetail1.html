@@ -184,12 +184,11 @@
 
     })
     function getResult(seckillId){
-        console.log("请求中")
+        console.log("请求中"+seckillId)
         g_showLoading();
         $.ajax({
             url: `/seckill/result/${seckillId}`,
             type: "GET",
-            contentType: "application/json;charset=utf-8",
             success: function(data) {
                 if (data.returnNo.code == 200) {
                     console.log(data)
@@ -208,7 +207,6 @@
                                 layer.close();
                             })
                     }
-                    // window.location.href = "orderDetail1.html?orderId="+data.data;
                 }else {
                     layer.msg(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
                 }

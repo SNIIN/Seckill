@@ -47,7 +47,7 @@ public class SeckillController {
     }
     @GetMapping (value = "/result/{seckillId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public ReturnObject getResult( @SeckillUser User user,@PathVariable(value="seckillId") Long seckillId) {
+    public ReturnObject getResult(@SeckillUser User user,@PathVariable(value="seckillId") Long seckillId) {
         Long status = seckillService.getOrderStatus(user, seckillId);
         return new ReturnObject(ReturnNo.SUCCESS,status);
     }

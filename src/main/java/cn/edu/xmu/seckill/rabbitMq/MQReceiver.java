@@ -6,6 +6,7 @@ import cn.edu.xmu.seckill.entity.Order;
 import cn.edu.xmu.seckill.entity.RabbitMqMessage;
 import cn.edu.xmu.seckill.entity.User;
 import cn.edu.xmu.seckill.mapper.OrderMapper;
+import cn.edu.xmu.seckill.mapper.SeckillGoodsMapper;
 import cn.edu.xmu.seckill.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,6 +25,8 @@ public class MQReceiver {
     private OrderMapper orderMapper;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private SeckillGoodsMapper seckillGoodsMapper;
 
     @RabbitListener(queues = "seckillQueue")
     public void receive(String msg) {
@@ -34,6 +37,7 @@ public class MQReceiver {
         Order order = Order.builder().goodsCount(1).goodsId(goods.getGoodsId()).goodsName(goods.getName())
                 .userId(user.getUserId()).channel((byte) 0).goodsPrice(goods.getSeckillPrice()).createDate(new Date())
                 .status((byte) 0).build();
+        seckillGoodsMapper.updateBySeckillStockAndSeckillId(goods.getSeckillStock()-1, goods.getSeckillId());
         orderMapper.insert(order);
         redisTemplate.opsForValue().set("order:" + user.getUserId() + ":" + goods.getGoodsId(), order);
     }

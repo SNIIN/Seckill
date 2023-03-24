@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PreDestroy;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,10 +52,9 @@ public class SeckillService implements ISeckillService, InitializingBean {
     @Transactional
     public ReturnObject doSeckill(User user, Long seckillId) {
         String status = (String)redisTemplate.opsForValue().get("orderTemp:" + user.getUserId() + ":" + SeckillId2GoodsId.get(seckillId));
-        log.info("订单信息"+status);
         if (null!=status){//判断重复抢购
             throw new SeckillException(ReturnNo.SECKILL_GOODS_USER_REPEAT);
-        }
+        }//TODO:需要写lua脚本
         //内存标记降低redis内存压力
         if (EmptyStockMap.get(seckillId))  throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         //数量判断
@@ -88,18 +88,17 @@ public class SeckillService implements ISeckillService, InitializingBean {
 
     @Override
     public Long getOrderStatus(User user, Long seckillId) {
-        Order order = (Order)redisTemplate.opsForValue().get("order:" + user.getUserId() + ":" + SeckillId2GoodsId.get(seckillId));
-        log.info("查询状态"+order);
+        Order order = orderMapper.selectByGoodsIdAndUserId(SeckillId2GoodsId.get(seckillId), user.getUserId());
         if (null != order) {
             return order.getOrderId();
         }else if (EmptyStockMap.get(seckillId)){
             return -1L;
         }else return 0L;
-
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        log.info("SeckillService执行");
         List<SeckillGoodsVo> goodsList = goodsService.getOnePageGoodsList(1);
         if (CollectionUtils.isEmpty(goodsList)){
             return;
@@ -111,4 +110,5 @@ public class SeckillService implements ISeckillService, InitializingBean {
             SeckillId2GoodsId.put(vo.getSeckillId(), vo.getGoodsId());
         });
     }
+
 }

@@ -54,6 +54,4 @@ public class LoginController {
         logger.info(loginVo.toString());
         return userService.doLogin(loginVo, httpServletRequest, httpServletResponse);
     }
-
-
 }

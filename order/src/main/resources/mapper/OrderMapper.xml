@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.xmu.order.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.xmu.order.mapper.entity.Order">
+    <id column="id" jdbcType="BIGINT" property="orderId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+    <result column="goods_count" jdbcType="INTEGER" property="goodsCount" />
+    <result column="channel" jdbcType="TINYINT" property="channel" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="delivery_addr_id" jdbcType="BIGINT" property="deliveryAddrId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="pay_date" jdbcType="TIMESTAMP" property="payDate" />
+    <result column="seckill_id" jdbcType="BIGINT" property="seckillId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, goods_id, goods_name, goods_price, goods_count, channel, status, delivery_addr_id, 
+    create_date, pay_date, seckill_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order
+    where id = #{orderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.xmu.order.mapper.entity.Order" useGeneratedKeys="true" keyProperty="orderId">
+    insert into t_order (user_id, goods_id,
+                         goods_name, goods_price, goods_count,
+                         channel, status, delivery_addr_id,
+                         create_date, pay_date, seckill_id)
+    values (#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},
+            #{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{goodsCount,jdbcType=INTEGER},
+            #{channel,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{deliveryAddrId,jdbcType=BIGINT},
+            #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP}, #{seckillId, jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.xmu.order.mapper.entity.Order">
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="goodsName != null">
+        goods_name,
+      </if>
+      <if test="goodsPrice != null">
+        goods_price,
+      </if>
+      <if test="goodsCount != null">
+        goods_count,
+      </if>
+      <if test="channel != null">
+        channel,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="deliveryAddrId != null">
+        delivery_addr_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="payDate != null">
+        pay_date,
+      </if>
+      <if test="seckillId != null">
+        seckill_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsCount != null">
+        #{goodsCount,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryAddrId != null">
+        #{deliveryAddrId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null">
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seckillId != null">
+        #{seckillId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.xmu.order.mapper.entity.Order">
+    update t_order
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsName != null">
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null">
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsCount != null">
+        goods_count = #{goodsCount,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null">
+        channel = #{channel,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="deliveryAddrId != null">
+        delivery_addr_id = #{deliveryAddrId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null">
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seckillId != null">
+        seckill_id = #{seckillId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{orderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.xmu.order.mapper.entity.Order">
+    update t_order
+    set user_id = #{userId,jdbcType=BIGINT},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      goods_count = #{goodsCount,jdbcType=INTEGER},
+      channel = #{channel,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      delivery_addr_id = #{deliveryAddrId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      pay_date = #{payDate,jdbcType=TIMESTAMP},
+      seckill_id = #{seckillId,jdbcType=BIGINT}
+    where id = #{orderId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,61 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: seckill-order
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seckill_order?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: seckill
+    password: 123456
+    #???
+    hikari:
+      pool-name: hikariPool
+      minimum-idle: 5
+      idle-timeout: 1800000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      auto-commit: true
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  rabbitmq:
+    host: 47.120.5.153
+    username: guest
+    password: guest
+    port: 5672
+    virtual-host: /
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 10
+        prefetch: 1
+        auto-startup: true
+        default-requeue-rejected: true
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
+        max-attempts: 3
+        max-interval: 10000ms
+
+#mybatis
+mybatis:
+  type-aliases-package: cn.edu.xmu.order.mapper.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+

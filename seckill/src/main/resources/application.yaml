@@ -1,0 +1,45 @@
+server:
+  port: 8084
+  tomcat:
+    threads:
+      max: 300
+      min-spare: 300
+    accept-count: 200
+
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+
+  application:
+    name: seckill-seckill
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+  rabbitmq:
+    host: 47.120.5.153
+    username: guest
+    password: guest
+    port: 5672
+    virtual-host: /
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 10
+        prefetch: 1
+        auto-startup: true
+        default-requeue-rejected: true
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
+        max-attempts: 3
+        max-interval: 10000ms
+
+
+

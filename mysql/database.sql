@@ -1,6 +1,6 @@
-CREATE USER IF NOT EXISTS 'seckill'@'%' IDENTIFIED BY '123456';
-GRANT PROCESS ON *.* TO 'seckill'@'%';
-GRANT PROCESS ON *.* TO 'seckill'@'localhost';
+CREATE USER IF NOT EXISTS 'seckill'@'%' IDENTIFIED WITH mysql_native_password BY '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'seckill'@'%';
+GRANT ALL PRIVILEGES ON *.* TO 'seckill'@'localhost';
 
 CREATE DATABASE IF NOT EXISTS seckill_user CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 GRANT ALL PRIVILEGES ON seckill_user.* to 'seckill'@'%';

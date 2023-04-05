@@ -15,8 +15,10 @@ public interface OrderMapper {
 
     int updateByPrimaryKeySelective(Order record);
 
-    int updateByPrimaryKey(Order record); @Select("select * from t_order where seckill_id = #{seckillId} and user_id = #{userId}")
+    int updateByPrimaryKey(Order record);
+    @Select("select * from t_order where seckill_id = #{seckillId} and user_id = #{userId}")
     Order selectBySeckillIdAndUserId(Long seckillId, Long userId);
+
 
     @Select("select o.id as orderNum, g.img, g.title, o.create_date, o.goods_price as seckillPrice from" +
             " t_order as o left join t_goods as g on o.goods_id = g.id where #{orderId} = o.id")

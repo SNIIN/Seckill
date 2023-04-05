@@ -162,6 +162,9 @@
             data:{
 
             },
+            xhrFields: {
+                withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的
+            },
             contentType: "application/json;charset=utf-8",
             success:function (data) {
                 var loveStr = ''

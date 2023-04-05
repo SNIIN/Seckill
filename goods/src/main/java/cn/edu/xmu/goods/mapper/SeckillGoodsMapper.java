@@ -16,7 +16,8 @@ public interface SeckillGoodsMapper {
 
     int updateByPrimaryKey(SeckillGoods record);
 
-    @Update("update t_seckill_goods set seckill_stock = seckill_stock-1 where id = #{seckilldId} and seckill_stock > 0")
+    @Update("update t_seckill_goods set seckill_stock = seckill_stock-1 where id " +
+            "= #{seckilldId} and seckill_stock > 0")
     int updateBySeckillStockAndSeckillId(Long seckillId);
 
 }

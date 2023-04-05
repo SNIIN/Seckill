@@ -9,17 +9,17 @@ import java.util.Date;
 public class SeckillGoodsVo{
 
     public String RedisSeckillStockKey() {
-        return String.format("SG_STOCK:%d", seckillId);
+        return String.format("GOODS:SG_STOCK:%d", seckillId);
     }
     public String RedisKey() {
-        return String.format("SG:%d", seckillId);
+        return String.format("GOODS:SG:%d", seckillId);
     }
 
     public static String RedisSeckillStockKey(Long seckillId) {
-        return String.format("SG_STOCK:%d", seckillId);
+        return String.format("GOODS:SG_STOCK:%d", seckillId);
     }
     public static String RedisKey(Long seckillId) {
-        return String.format("SG:%d", seckillId);
+        return String.format("GOODS:SG:%d", seckillId);
     }
     private Long seckillId;
 

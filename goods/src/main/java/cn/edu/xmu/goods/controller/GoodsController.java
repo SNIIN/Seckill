@@ -41,7 +41,7 @@ public class GoodsController {
     public SeckillGoodsVo getOneSeckillGoodsForUpdate(@RequestParam("seckillid") Long seckillId) {
         SeckillGoodsVo res = null;
         try {
-            res = goodsService.getOneSeckillGoodsForUpdate(seckillId);
+            res = goodsService.getOneSeckillGoods(seckillId);
         }catch (Exception e) {
             log.warn("出现了错误");
             return null;

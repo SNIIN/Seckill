@@ -3,6 +3,7 @@ package cn.edu.xmu.core;
 import cn.edu.xmu.core.mapper.UserMapper;
 import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import java.io.*;
 import java.util.List;
 
 @SpringBootTest
+@Slf4j
 class SeckillApplicationTests {
 
 	@Autowired
@@ -18,7 +20,10 @@ class SeckillApplicationTests {
 	@Autowired
 	private UserService userService;
 
-
+    @Test
+	void test() {
+		log.info("{}", userService.getClass());
+	}
 	@Test
 	void generateTestUsersForJmeter() throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter("..\\jmeter\\data.csv"));

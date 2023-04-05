@@ -12,6 +12,7 @@ import cn.edu.xmu.order.mapper.entity.Order;
 import cn.edu.xmu.order.service.feign.GoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -21,28 +22,25 @@ import java.util.Date;
 @Slf4j
 public class OrderService {
     private final RedisUtil redisUtil;
+    private final RedisTemplate redisTemplate;
     private final OrderMapper orderMapper;
     private final GoodsService goodsService;
     @Autowired
-    public OrderService(RedisUtil redisUtil, GoodsService goodsService, OrderMapper orderMapper) {
+    public OrderService(RedisUtil redisUtil, GoodsService goodsService, OrderMapper orderMapper, RedisTemplate redisTemplate) {
         this.redisUtil = redisUtil;
+        this.redisTemplate = redisTemplate;
         this.goodsService = goodsService;
         this.orderMapper = orderMapper;
     }
 
     public Long createOrder(SeckillGoodsVo goods, User user) {
         Order order = null;
-        try {
-            order = Order.builder().goodsCount(1).goodsId(goods.getGoodsId()).goodsName(goods.getName())
-                    .userId(user.getUserId()).channel((byte) 0).goodsPrice(goods.getSeckillPrice()).createDate(new Date())
-                    .status((byte) 0).seckillId(goods.getSeckillId()).build();
-            orderMapper.insert(order);
-            redisUtil.addToSet(order.getUserId().toString(), goods.getSeckillId(), true);
-            return order.getOrderId();
-        }catch (Exception e) {
-            log.info("插入错误: {}", e.getMessage());
-            return -1l;
-        }
+        order = Order.builder().goodsCount(1).goodsId(goods.getGoodsId()).goodsName(goods.getName())
+                .userId(user.getUserId()).channel((byte) 0).goodsPrice(goods.getSeckillPrice()).createDate(new Date())
+                .status((byte) 0).seckillId(goods.getSeckillId()).build();
+        orderMapper.insert(order);
+        redisUtil.addToSet(String.format("UOG:%d", user.getUserId()), goods.getSeckillId(), true);
+        return order.getOrderId();
     }
 
     public SeckillOrderVo getSeckillOrder(Long orderId) {
@@ -50,7 +48,12 @@ public class OrderService {
         if (null == tmp) {
             throw new SeckillException(ReturnNo.SECKILL_ORDER_NON);
         }
+        log.info("订单: {}", tmp.toString());
         GoodsVo goods = goodsService.getOneSeckillGoods(tmp.getGoodsId());
+        if (null == goods) {
+            throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
+        }
+        log.info("商品: {}", goods);
         SeckillOrderVo order = SeckillOrderVo.builder().orderNum(orderId).seckillPrice(tmp.getGoodsPrice())
                 .createDate(tmp.getCreateDate()).title(goods.getTitle()).img(goods.getImg()).build();
         return order;

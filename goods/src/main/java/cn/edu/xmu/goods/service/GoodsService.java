@@ -1,11 +1,13 @@
 package cn.edu.xmu.goods.service;
 
+import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.goods.controller.vo.GoodsVo;
 import cn.edu.xmu.goods.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.goods.mapper.GoodsMapper;
 import cn.edu.xmu.goods.mapper.SeckillGoodsMapper;
 import cn.edu.xmu.core.utils.ReturnNo;
+import cn.edu.xmu.goods.mapper.entity.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ import java.util.List;
 public class GoodsService {
     private final GoodsMapper goodsMapper;
     private final SeckillGoodsMapper seckillGoodsMapper;
+    private final RedisUtil redisUtil;
     @Autowired
-    public GoodsService(GoodsMapper goodsMapper, SeckillGoodsMapper seckillGoodsMapper) {
+    public GoodsService(RedisUtil redisUtil, GoodsMapper goodsMapper, SeckillGoodsMapper seckillGoodsMapper) {
         this.seckillGoodsMapper = seckillGoodsMapper;
         this.goodsMapper = goodsMapper;
+        this.redisUtil = redisUtil;
     }
 
     /**
@@ -32,18 +36,14 @@ public class GoodsService {
         return result;
     }
 
-    public SeckillGoodsVo getOneSeckillGoodsForUpdate(Long seckillId) {
-        SeckillGoodsVo result = goodsMapper.selectSeckillGoodsVoByIdForUpdate(seckillId);
-        if (null == result) {
-            throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
-        }
-        return result;
-    }
-
     public SeckillGoodsVo getOneSeckillGoods(Long seckillId) {
-        SeckillGoodsVo result = goodsMapper.selectSeckillGoodsVoById(seckillId);
+        SeckillGoodsVo result = (SeckillGoodsVo) redisUtil.getValueByKey(SeckillGoodsVo.RedisKey(seckillId));
         if (null == result) {
-            throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
+            result = goodsMapper.selectSeckillGoodsVoByIdForUpdate(seckillId);
+            if (null == result) {
+                throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
+            }
+            redisUtil.addAsKeyValue(SeckillGoodsVo.RedisKey(seckillId), result, true);
         }
         return result;
     }
@@ -54,6 +54,13 @@ public class GoodsService {
     }
 
     public GoodsVo getGoodsVoById(Long goodsId) {
-        return goodsMapper.selectGoodsVoById(goodsId);
+        GoodsVo goodsVo = (GoodsVo) redisUtil.getValueByKey(GoodsVo.redisKey(goodsId));
+        if (null != goodsVo) return goodsVo;
+        else {
+            goodsVo = goodsMapper.selectGoodsVoById(goodsId);
+            if (null != goodsVo)
+                redisUtil.addAsKeyValue(GoodsVo.redisKey(goodsId), goodsVo, true);
+            return goodsVo;
+        }
     }
 }

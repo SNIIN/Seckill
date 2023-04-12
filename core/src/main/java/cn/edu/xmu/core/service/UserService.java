@@ -1,6 +1,7 @@
 package cn.edu.xmu.core.service;
 
 import cn.edu.xmu.core.controller.vo.LoginVo;
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.mapper.UserMapper;
@@ -42,21 +43,20 @@ public class UserService{
         if (null == user) {
             throw new SeckillException(ReturnNo.LOGIN_ERROR);
         }
-        logger.info(user.toString());
-        logger.info(String.format("MD5Util.backToDb(loginVo.getPassword(), user.getSalt()): %s", MD5Util.backToDb(loginVo.getPassword(), user.getSalt())));
         if (!MD5Util.backToDb(loginVo.getPassword(), user.getSalt()).equals(user.getPassword())) {
             throw new SeckillException(ReturnNo.LOGIN_ERROR);
         }
         // 生成登录凭证，存入cookie中
         String token = generateLoginToken();
-        redisTemplate.opsForValue().set(user.RedisKey(token), user, 30, TimeUnit.MINUTES);
+        UserVo userVo = UserVo.builder().userId(user.getUserId()).head(user.getHead()).nickname(user.getNickname()).build();
+        redisTemplate.opsForValue().set(userVo.RedisKey(token), userVo, 30, TimeUnit.MINUTES);
         CookieUtil.setCookieValue(httpServletRequest, httpServletResponse, "token", token);
         return new ReturnObject(ReturnNo.SUCCESS);
     }
 
-    public User getUserByCookie(String token) {
+    public UserVo getUserByCookie(String token) {
         log.info(token);
-        User user = (User) redisTemplate.opsForValue().get(User.RedisKey(token));
+        UserVo user = (UserVo) redisTemplate.opsForValue().get(UserVo.RedisKey(token));
         return user;
     }
 
@@ -75,7 +75,8 @@ public class UserService{
             throw new SeckillException(ReturnNo.LOGIN_ERROR);
         }
         String token = generateLoginToken();
-        redisTemplate.opsForValue().set(user.RedisKey(token), user, 30, TimeUnit.MINUTES);
+        UserVo userVo = UserVo.builder().userId(user.getUserId()).head(user.getHead()).nickname(user.getNickname()).build();
+        redisTemplate.opsForValue().set(userVo.RedisKey(token), userVo, 30, TimeUnit.MINUTES);
         return token;
     }
 

@@ -37,6 +37,7 @@
                 <artifactId>spring-boot-starter-actuator</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+
             <!-- md5 -->
             <dependency>
                 <groupId>commons-codec</groupId>

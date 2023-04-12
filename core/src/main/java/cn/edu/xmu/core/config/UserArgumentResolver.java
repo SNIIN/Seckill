@@ -1,6 +1,7 @@
 package cn.edu.xmu.core.config;
 
 import cn.edu.xmu.core.config.annotation.SeckillUser;
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.utils.CookieUtil;
@@ -44,7 +45,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         if (null == token || token.isEmpty()) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }
-        User user = (User) redisTemplate.opsForValue().get(User.RedisKey(token));
+        UserVo user = (UserVo) redisTemplate.opsForValue().get(UserVo.RedisKey(token));
         if (null == user) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }

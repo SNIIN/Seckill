@@ -1,6 +1,6 @@
 package cn.edu.xmu.seckill.rabbitmq;
 
-import cn.edu.xmu.core.mapper.entity.User;
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.seckill.config.RabbitMQConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,7 +20,7 @@ public class RabbitSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void send(User user, Long seckillId) {
+    public void send(UserVo user, Long seckillId) {
         ObjectNode jsonObject = objectMapper.createObjectNode();
         jsonObject.set("user", objectMapper.valueToTree(user));
         jsonObject.put("seckillId", seckillId);

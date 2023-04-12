@@ -7,6 +7,7 @@ server:
     accept-count: 200
 
 
+
 spring:
   redis:
     host: localhost

@@ -1,16 +1,14 @@
 package cn.edu.xmu.goods.controller;
 
 import cn.edu.xmu.core.config.annotation.SeckillUser;
-import cn.edu.xmu.core.exception.SeckillException;
-import cn.edu.xmu.core.mapper.entity.User;
+import cn.edu.xmu.core.controller.vo.SeckillGoodsVo;
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.goods.controller.vo.GoodsVo;
-import cn.edu.xmu.goods.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.goods.service.GoodsService;
 import cn.edu.xmu.core.utils.ReturnObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class GoodsController {
     }
 
     @GetMapping(value = "/glist", produces = "application/json;charset=UTF-8")
-    public ReturnObject getlist(@SeckillUser User user) {
+    public ReturnObject getlist(@SeckillUser UserVo user) {
         List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
         return new ReturnObject(ReturnNo.SUCCESS,lst);
     }

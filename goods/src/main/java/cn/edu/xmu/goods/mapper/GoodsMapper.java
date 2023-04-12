@@ -1,7 +1,7 @@
 package cn.edu.xmu.goods.mapper;
 
+import cn.edu.xmu.core.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.goods.controller.vo.GoodsVo;
-import cn.edu.xmu.goods.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.goods.mapper.entity.Goods;
 import org.apache.ibatis.annotations.Select;
 

@@ -1,11 +1,11 @@
 package cn.edu.xmu.order.service;
 
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.core.exception.SeckillException;
-import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.order.controller.vo.GoodsVo;
-import cn.edu.xmu.order.controller.vo.SeckillGoodsVo;
+import cn.edu.xmu.core.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.order.controller.vo.SeckillOrderVo;
 import cn.edu.xmu.order.mapper.OrderMapper;
 import cn.edu.xmu.order.mapper.entity.Order;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.Date;
 
 @Service
@@ -33,7 +32,7 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
-    public Long createOrder(SeckillGoodsVo goods, User user) {
+    public Long createOrder(SeckillGoodsVo goods, UserVo user) {
         Order order = null;
         order = Order.builder().goodsCount(1).goodsId(goods.getGoodsId()).goodsName(goods.getName())
                 .userId(user.getUserId()).channel((byte) 0).goodsPrice(goods.getSeckillPrice()).createDate(new Date())

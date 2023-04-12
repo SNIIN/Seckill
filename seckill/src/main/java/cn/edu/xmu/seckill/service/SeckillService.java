@@ -1,10 +1,10 @@
 package cn.edu.xmu.seckill.service;
 
+import cn.edu.xmu.core.controller.vo.SeckillGoodsVo;
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.core.exception.SeckillException;
-import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.core.utils.ReturnNo;
-import cn.edu.xmu.seckill.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.seckill.rabbitmq.RabbitSender;
 import cn.edu.xmu.seckill.service.feign.GoodsService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,21 +33,14 @@ public class SeckillService implements InitializingBean {
     }
 
 
-    public Boolean doSeckill(User user, Long seckillId) {
-        Long begin = System.currentTimeMillis();
+    public Boolean doSeckill(UserVo user, Long seckillId) {
         // 重复抢购
         if (redisUtil.isSetMember(String.format("UOG:%d", user.getUserId()), seckillId))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_USER_REPEAT);
-        Long end1 = System.currentTimeMillis();
-        log.info("无重复抢购, :{}ms", end1-begin);
         SeckillGoodsVo goods = (SeckillGoodsVo) redisUtil.getValueByKey(SeckillGoodsVo.RedisKey(seckillId));
-        Long end2 = System.currentTimeMillis();
-        log.info("goods: {}, {}ms", goods, end2-end1);
         Date now = new Date();
         if (!(now.after(goods.getBeginTime())&&now.before(goods.getEndTime())))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_EXIST);
-        Long end3 = System.currentTimeMillis();
-        log.info("日期合法, :{} ms", end3-end2);
         if (emptySeckillStock.get(seckillId))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         Long stock = redisTemplate.opsForValue().decrement(SeckillGoodsVo.RedisSeckillStockKey(seckillId));
@@ -56,11 +49,7 @@ public class SeckillService implements InitializingBean {
             emptySeckillStock.put(seckillId, true);
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         }
-        Long end4 = System.currentTimeMillis();
-        log.info("库存充足: {}ms", end4-end3);
         rabbitSender.send(user, seckillId);
-        Long end5 = System.currentTimeMillis();
-        log.info("发送消息总耗时：{}ms", end5-begin);
         return true;
     }
 

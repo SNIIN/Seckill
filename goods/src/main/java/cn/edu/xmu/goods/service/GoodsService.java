@@ -1,13 +1,12 @@
 package cn.edu.xmu.goods.service;
 
+import cn.edu.xmu.core.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.goods.controller.vo.GoodsVo;
-import cn.edu.xmu.goods.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.goods.mapper.GoodsMapper;
 import cn.edu.xmu.goods.mapper.SeckillGoodsMapper;
 import cn.edu.xmu.core.utils.ReturnNo;
-import cn.edu.xmu.goods.mapper.entity.Goods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,14 +36,13 @@ public class GoodsService {
     }
 
     public SeckillGoodsVo getOneSeckillGoods(Long seckillId) {
-        SeckillGoodsVo result = (SeckillGoodsVo) redisUtil.getValueByKey(SeckillGoodsVo.RedisKey(seckillId));
+//        SeckillGoodsVo result = (SeckillGoodsVo) redisUtil.getValueByKey(SeckillGoodsVo.RedisKey(seckillId));
+//        if (null == result) {
+        SeckillGoodsVo result = goodsMapper.selectSeckillGoodsVoByIdForUpdate(seckillId);
         if (null == result) {
-            result = goodsMapper.selectSeckillGoodsVoByIdForUpdate(seckillId);
-            if (null == result) {
-                throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
-            }
-            redisUtil.addAsKeyValue(SeckillGoodsVo.RedisKey(seckillId), result, true);
+            throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
         }
+//        }
         return result;
     }
 

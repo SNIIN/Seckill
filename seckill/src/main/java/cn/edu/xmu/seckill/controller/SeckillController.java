@@ -1,7 +1,7 @@
 package cn.edu.xmu.seckill.controller;
 
 import cn.edu.xmu.core.config.annotation.SeckillUser;
-import cn.edu.xmu.core.mapper.entity.User;
+import cn.edu.xmu.core.controller.vo.UserVo;
 import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.core.utils.ReturnObject;
 import cn.edu.xmu.seckill.service.SeckillService;
@@ -31,7 +31,7 @@ public class SeckillController {
     @PostMapping(value = "/{seckillid}", produces = "application/json;charset=UTF-8")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ReturnObject doSeckill(@SeckillUser User user, @PathVariable("seckillid") Long seckillId, HttpServletRequest httpServletRequest) {
+    public ReturnObject doSeckill(@SeckillUser UserVo user, @PathVariable("seckillid") Long seckillId, HttpServletRequest httpServletRequest) {
         log.info("控制器: {}，{}",  user, seckillId);
         seckillService.doSeckill(user, seckillId);
         return new ReturnObject(ReturnNo.SECKILL_GOODS_IN_QUEUE, "", "排队中...");

@@ -12,7 +12,7 @@ File Encoding         : 65001
 
 Date: 2023-03-16 11:49:16
 */
-
+USE seckill_goods;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------

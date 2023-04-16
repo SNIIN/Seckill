@@ -1,5 +1,6 @@
 /*
 mysql8
+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
 */
 CREATE ROLE IF NOT EXISTS grant_role;
 GRANT GRANT OPTION ON *.* TO grant_role;

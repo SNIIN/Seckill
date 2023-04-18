@@ -1,16 +1,13 @@
 package cn.edu.xmu.core.controller;
 
 import cn.edu.xmu.core.controller.vo.LoginVo;
-import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.service.UserService;
 import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.core.utils.ReturnObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,4 +35,10 @@ public class LoginController {
         return userService.doLogin(loginVo, httpServletRequest, httpServletResponse);
     }
 
+    @Value("${testValue}")
+    private String testValue;
+    @GetMapping(value = "/dotest", produces = "application/json;charset=UTF-8")
+    public ReturnObject test() {
+        return new ReturnObject(ReturnNo.SUCCESS, "", testValue);
+    }
 }

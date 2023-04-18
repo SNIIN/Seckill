@@ -12,7 +12,7 @@ File Encoding         : 65001
 
 Date: 2023-03-27 19:41:55
 */
-
+USE seckill_order;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------

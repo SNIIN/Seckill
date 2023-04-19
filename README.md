@@ -5,7 +5,10 @@
 
 ## 业务流程
 > 用户登录 -> 查看秒杀商品页 -> 查看秒杀商品详情页 -> 下单秒杀 -> （处理秒杀消息，支付暂略过)  -> 查询秒杀结果
-
+## 演示视频
+<video width="640" height="360" controls>
+  <source src="https://www.bilibili.com/video/BV1ZP411S7yD/?spm_id_from=444.41.list.card_archive.click&vd_source=5e8cf3167d20d2129734a5c738995c16" type="video/mp4">
+</video>
 ## 业务侧重实现
 <ul>
    <li><b>用户登录</b></li>

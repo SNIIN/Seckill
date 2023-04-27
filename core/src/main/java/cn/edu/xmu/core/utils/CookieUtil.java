@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class CookieUtil {
+    private static final String DOMAIN = "localhost";
     public static String getCookieValue(HttpServletRequest httpServletRequest, String cookieName) {
         Cookie[] cookies = httpServletRequest.getCookies();
         if (cookies == null || cookieName == null) return null;
@@ -25,11 +26,7 @@ public class CookieUtil {
         Cookie cookie = new Cookie(cookieName, cookieValue);
         cookie.setPath("/");
         cookie.setMaxAge(3600);
-        String host = httpServletRequest.getHeader("Host");
-        if (host != null) {
-            String domain = host.split(":")[0];
-            cookie.setDomain(domain);
-        }
+        cookie.setDomain(DOMAIN);
         log.info("cookie: Name = {}, Value = {}", cookieName, cookieValue);
         httpServletResponse.addCookie(cookie);
     }

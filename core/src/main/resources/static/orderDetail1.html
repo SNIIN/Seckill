@@ -142,7 +142,7 @@
         var orderId = g_getQueryString("orderId");
         layer.load();
         $.ajax({
-            url: `http://localhost:8085/order/gorder?orderId=${orderId}`,
+            url: `http://localhost:8090/order/gorder?orderId=${orderId}`,
             xhrFields: {
                 withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的
             },

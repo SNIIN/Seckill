@@ -453,12 +453,15 @@
     password = md5(password);
     console.log(password);
     $.ajax({
-      url: "/dologin",
+      url: "http://localhost:8090/user/dologin",
       type: "POST",
       data: JSON.stringify({
         "mobile": username,
         "password": password
       }),
+      xhrFields: {
+        withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的
+      },
       contentType: "application/json;charset=utf-8",
       success:function (data) {
         if(data.returnNo.code===200){
@@ -467,7 +470,6 @@
         }else {
           $('#user_info').html(data.returnNo.message+"\n更详细的信息:"+data.specMessage);
         }
-        console.log(data);
       },
       error:function (e) {
         vmForAll.messageBox('error','登陆失败')

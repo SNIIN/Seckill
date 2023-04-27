@@ -32,7 +32,8 @@ public class LoginController {
                                 HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse) {
         logger.info(loginVo.toString());
-        return userService.doLogin(loginVo, httpServletRequest, httpServletResponse);
+        ReturnObject returnObject = userService.doLogin(loginVo, httpServletRequest, httpServletResponse);
+        return returnObject;
     }
 
     @Value("${testValue}")

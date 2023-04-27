@@ -1,0 +1,42 @@
+testValue: 109
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: seckill-core
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/seckill_user?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: seckill
+    password: 123456
+    #连接池
+    hikari:
+      pool-name: hikariPool
+      minimum-idle: 5
+      idle-timeout: 1800000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      auto-commit: true
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+#mybatis
+mybatis:
+  type-aliases-package: cn.edu.xmu.goods.mapper.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+

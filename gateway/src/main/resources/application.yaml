@@ -1,0 +1,58 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: seckill-gateway
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:8080"
+            allowed-methods:
+              - GET
+              - POST
+              - OPTIONS
+            allowed-headers:
+              - '*'
+            allow-credentials: true
+            max-age: 3600
+
+        add-to-simple-url-handler-mapping: true
+      routes:
+        - id: user
+          uri: lb://seckill-core
+          predicates:
+            - Path=/user/{segment}
+          filters:
+            - SetPath=/{segment}
+        - id: goods
+          uri: lb://seckill-goods
+          predicates:
+            - Path=/goods/**
+          filters:
+            - name: AuthFilterFactory
+        - id: order
+          uri: lb://seckill-order
+          predicates:
+            - Path=/order/**
+          filters:
+            - name: AuthFilterFactory
+        - id: seckill
+          uri: lb://seckill-seckill
+          predicates:
+            - Path=/seckill/**
+          filters:
+            - name: AuthFilterFactory
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+
+

@@ -2,26 +2,21 @@ package cn.edu.xmu.core.service;
 
 import cn.edu.xmu.core.controller.vo.LoginVo;
 import cn.edu.xmu.core.controller.vo.UserVo;
-import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.mapper.UserMapper;
-import cn.edu.xmu.core.utils.CookieUtil;
-import cn.edu.xmu.core.utils.MD5Util;
-import cn.edu.xmu.core.utils.ReturnNo;
-import cn.edu.xmu.core.utils.ReturnObject;
+import cn.edu.xmu.core.mapper.entity.User;
+import cn.edu.xmu.core.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -29,15 +24,15 @@ public class UserService{
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserMapper userMapper;
-    private final RedisTemplate redisTemplate;
+    private final RedisUtil redisUtil;
     @Autowired
-    UserService(UserMapper userMapper, RedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    UserService(UserMapper userMapper, RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
         this.userMapper = userMapper;
     }
 
 
-    public ReturnObject doLogin(LoginVo loginVo, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    public ReturnObject doLogin(LoginVo loginVo, HttpServletResponse httpServletResponse) {
         Long userId = Long.parseLong(loginVo.getMobile());
         User user = userMapper.selectByPrimaryKey(userId);
         if (null == user) {
@@ -49,14 +44,13 @@ public class UserService{
         // 生成登录凭证，存入cookie中
         String token = generateLoginToken();
         UserVo userVo = UserVo.builder().userId(user.getUserId()).head(user.getHead()).nickname(user.getNickname()).build();
-        redisTemplate.opsForValue().set(userVo.RedisKey(token), userVo, 30, TimeUnit.MINUTES);
-        CookieUtil.setCookieValue(httpServletRequest, httpServletResponse, "token", token);
+        redisUtil.addAsKeyValue(userVo.RedisKey(token), userVo, true);
+        CookieUtil.setCookieValue(httpServletResponse, "token", token);
         return new ReturnObject(ReturnNo.SUCCESS);
     }
 
     public UserVo getUserByCookie(String token) {
-        log.info(token);
-        UserVo user = (UserVo) redisTemplate.opsForValue().get(UserVo.RedisKey(token));
+        UserVo user = (UserVo) redisUtil.getValueByKey(UserVo.RedisKey(token));
         return user;
     }
 
@@ -76,7 +70,7 @@ public class UserService{
         }
         String token = generateLoginToken();
         UserVo userVo = UserVo.builder().userId(user.getUserId()).head(user.getHead()).nickname(user.getNickname()).build();
-        redisTemplate.opsForValue().set(userVo.RedisKey(token), userVo, 30, TimeUnit.MINUTES);
+        redisUtil.addAsKeyValue(userVo.RedisKey(token), userVo, true);
         return token;
     }
 

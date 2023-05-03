@@ -1,5 +1,6 @@
 package cn.edu.xmu.core.controller.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class LoginVo {
     @NotNull
     @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号码格式不正确")

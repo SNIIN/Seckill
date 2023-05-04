@@ -1,20 +1,16 @@
 package cn.edu.xmu.goods.mapper;
 
-import cn.edu.xmu.goods.mapper.entity.SeckillGoods;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 public interface SeckillGoodsMapper {
-    int deleteByPrimaryKey(Long seckillId);
 
-    int insert(SeckillGoods record);
 
-    int insertSelective(SeckillGoods record);
+    @Update("update t_seckill_goods set seckill_stock = #{cnt} where id = #{seckillId}")
+    int forTest1(Long seckillId, Integer cnt);
 
-    SeckillGoods selectByPrimaryKey(Long seckillId);
-
-    int updateByPrimaryKeySelective(SeckillGoods record);
-
-    int updateByPrimaryKey(SeckillGoods record);
+    @Select("select seckill_stock from t_seckill_goods where id = #{seckillId}")
+    int forCheck1(Long seckillId);
 
     @Update("update t_seckill_goods set seckill_stock = seckill_stock-1 where id " +
             "= #{seckilldId} and seckill_stock > 0")

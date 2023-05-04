@@ -2,14 +2,13 @@ package cn.edu.xmu.core.config;
 
 import cn.edu.xmu.core.config.annotation.SeckillUser;
 import cn.edu.xmu.core.controller.vo.UserVo;
-import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.utils.CookieUtil;
+import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.core.utils.ReturnNo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -22,11 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final RedisTemplate redisTemplate;
+    private final RedisUtil redisUtil;
 
     @Autowired
-    public UserArgumentResolver(RedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    public UserArgumentResolver(RedisUtil redisUtil) {
+        this.redisUtil = redisUtil;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         if (null == token || token.isEmpty()) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }
-        UserVo user = (UserVo) redisTemplate.opsForValue().get(UserVo.RedisKey(token));
+        UserVo user = (UserVo) redisUtil.getValueByKey(UserVo.RedisKey(token));
         if (null == user) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }

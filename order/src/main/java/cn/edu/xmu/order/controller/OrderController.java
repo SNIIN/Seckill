@@ -23,7 +23,7 @@ public class OrderController {
 
     @GetMapping (value = "/gorder", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public ReturnObject getmyOrder(@SeckillUser UserVo user, @RequestParam(value="orderId") Long orderId) {
+    public ReturnObject getOrder(@SeckillUser UserVo user, @RequestParam(value="orderId") Long orderId) {
         SeckillOrderVo order = orderService.getSeckillOrder(orderId);
         log.info(order.toString());
         return new ReturnObject(ReturnNo.SUCCESS,order);

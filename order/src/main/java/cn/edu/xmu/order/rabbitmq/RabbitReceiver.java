@@ -41,12 +41,9 @@ public class RabbitReceiver {
     @RabbitListener(queues = RabbitMQConfig.SECKILL_QUEUE)
     @Transactional
     public void receive(Message msg) throws Exception {
-        Long begin = System.currentTimeMillis();
         byte[] body = msg.getBody();
         String jsonString = new String(body);
-        log.info("接受者: msg = {}, jsonstring = {}", msg, jsonString);
         ObjectNode objectNode = (ObjectNode) objectMapper.readTree(jsonString);
-        log.info("seckill消费者 接收消息: {}", objectNode.toString());
         UserVo user = objectMapper.treeToValue(objectNode.get("user"), UserVo.class);
         Long seckillId = objectNode.get("seckillId").asLong();
         Boolean unlocked = redisTemplate.opsForValue().setIfAbsent(String.format("LOCK_US:%d_%d", user.getUserId(), seckillId), "1", 10, TimeUnit.SECONDS);
@@ -58,10 +55,12 @@ public class RabbitReceiver {
                 // 判断user合法性,略
                 SeckillGoodsVo goods = (SeckillGoodsVo) redisTemplate.opsForValue().get(SeckillGoodsVo.RedisKey(seckillId));
                 if (null == result) {
-                    goods = goodsService.getOneSeckillGoodsForUpdate(seckillId);
+                    goods = goodsService.getOneSeckillGoods(seckillId);
                     redisUtil.addAsKeyValue(SeckillGoodsVo.RedisKey(seckillId), goods, true);
                 }
-                if (goodsService.updateBySeckillStockAndSeckillId(seckillId))
+                if (null == goods)
+                    return;
+                if (goodsService.downSeckillsCount(seckillId))
                     return;
                 orderService.createOrder(goods, user);
             }finally {

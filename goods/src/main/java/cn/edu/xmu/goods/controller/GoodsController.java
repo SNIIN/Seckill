@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/goods")
 @Slf4j
@@ -24,9 +23,16 @@ public class GoodsController {
         this.goodsService = goodsService;
     }
 
+    /**
+     * pageNum = -1的时候不使用分页，返回全部数据
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @GetMapping(value = "/glist", produces = "application/json;charset=UTF-8")
-    public ReturnObject getlist() {
-        List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(1);
+    public ReturnObject getlist(@RequestParam(defaultValue = "-1") Integer pageNum,
+                                @RequestParam(defaultValue = "10") Integer pageSize) {
+        List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(pageNum, pageSize);
         return new ReturnObject(ReturnNo.SUCCESS,lst);
     }
 
@@ -36,8 +42,8 @@ public class GoodsController {
         return new ReturnObject(ReturnNo.SUCCESS,vo);
     }
 
-    @GetMapping("")
-    public SeckillGoodsVo getOneSeckillGoodsForUpdate(@RequestParam("seckillid") Long seckillId) {
+    @GetMapping(value="/seckill", produces = "application/json;charset=UTF-8")
+    public SeckillGoodsVo getOneSeckillGoods(@RequestParam("seckillid") Long seckillId) {
         SeckillGoodsVo res = null;
         try {
             res = goodsService.getOneSeckillGoods(seckillId);
@@ -48,33 +54,29 @@ public class GoodsController {
         return res;
     }
 
+    /**
+     * 扣减失败返回true，扣减成功返回false
+     * @param seckillId
+     * @return
+     */
     @GetMapping("/down")
-    Boolean updateBySeckillStockAndSeckillId(@RequestParam("seckillid") Long seckillId) {
-        try {
+    Boolean downSeckillsCount(@RequestParam("seckillid") Long seckillId) {
+//        try {
             return goodsService.updateBySeckillStockAndSeckillId(seckillId);
-        }catch (Exception e) {
-            log.warn("出现了错误");
-            return true;
-        }
+//        }catch (Exception e) {
+//            log.warn("出现了错误");
+//            return true;
+//        }
     }
 
-    @GetMapping("/list")
-    List<SeckillGoodsVo> getOnePageGoodsList(@RequestParam("page") Integer page) {
-        try {
-            return goodsService.getOnePageGoodsList(1);
-        }catch (Exception e) {
-            log.warn("出现了错误");
-            return null;
-        }
-    }
 
-    @GetMapping("/one")
-    GoodsVo getOneSeckillGoods(@RequestParam("goodsid") Long goodsId) {
-        try {
+    @GetMapping(value="/goods", produces = "application/json;charset=UTF-8")
+    GoodsVo getOneGoods(@RequestParam("goodsid") Long goodsId) {
+//        try {
             return goodsService.getGoodsVoById(goodsId);
-        }catch (Exception e) {
-            log.warn("出现了错误");
-            return null;
-        }
+//        }catch (Exception e) {
+//            log.warn("出现了错误");
+//            return null;
+//        }
     }
 }

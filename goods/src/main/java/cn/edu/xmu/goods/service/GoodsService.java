@@ -7,6 +7,7 @@ import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.goods.mapper.GoodsMapper;
 import cn.edu.xmu.goods.mapper.SeckillGoodsMapper;
 import cn.edu.xmu.core.utils.ReturnNo;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,11 @@ public class GoodsService {
 
     /**
      * 获取第page页，当前处于秒杀活动的商品列表
-     * 一页最大商品数量默认10， page从1开始, (暂不实现分页)
-     * @param page
-     * @return
+     * 一页最大商品数量默认10， page从1开始
      */
-    public List<SeckillGoodsVo> getOnePageGoodsList(int page) {
+    public List<SeckillGoodsVo> getOnePageGoodsList(Integer pageNum, Integer pageSize) {
+        if (pageNum != -1)
+            PageHelper.startPage(pageNum, pageSize);
         List<SeckillGoodsVo> result = goodsMapper.selectSeckillGoodsVo();
         return result;
     }

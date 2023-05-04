@@ -48,7 +48,7 @@ public class OrderService {
             throw new SeckillException(ReturnNo.SECKILL_ORDER_NON);
         }
         log.info("订单: {}", tmp.toString());
-        GoodsVo goods = goodsService.getOneSeckillGoods(tmp.getGoodsId());
+        GoodsVo goods = goodsService.getOneGoods(tmp.getGoodsId());
         if (null == goods) {
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
         }

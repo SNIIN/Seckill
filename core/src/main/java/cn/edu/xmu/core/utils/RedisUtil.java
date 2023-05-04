@@ -1,8 +1,11 @@
 package cn.edu.xmu.core.utils;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -10,6 +13,7 @@ public class RedisUtil {
     private static final int BASETIMEOUT = 3000;
     private static final Random random = new Random();
     private final RedisTemplate redisTemplate;
+    @Autowired
     public RedisUtil(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
@@ -64,5 +68,20 @@ public class RedisUtil {
         Boolean result = redisTemplate.opsForSet().isMember(key, value);
         if (null == result || !result) return false;
         return true;
+    }
+
+    public Long incr(String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    public Long decr(String key) {
+        return redisTemplate.opsForValue().decrement(key);
+    }
+
+    public Set<String> keys(String key) {
+        return redisTemplate.keys(key);
+    }
+    public void deleteKeys(Set<String> keys) {
+        redisTemplate.delete(keys);
     }
 }

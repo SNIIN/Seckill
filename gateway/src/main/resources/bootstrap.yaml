@@ -5,4 +5,4 @@ spring:
         server-addr: nacos:8848
         file-extension: yaml
   application:
-    name: seckill-seckill
+    name: seckill-gateway

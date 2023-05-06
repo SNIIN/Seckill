@@ -21,10 +21,10 @@
     </properties>
     <modules>
         <module>core</module>
-        <module>goods</module>
+        <!--<module>goods</module>
         <module>seckill</module>
         <module>order</module>
-        <module>gateway</module>
+        <module>gateway</module>-->
     </modules>
     <dependencyManagement>
         <dependencies>

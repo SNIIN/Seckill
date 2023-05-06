@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 @FeignClient(name = "seckill-goods")
 public interface GoodsService {
-    @GetMapping("/goods/glist")
+    @GetMapping("/goods/list")
     List<SeckillGoodsVo> getOnePageGoodsList();
 }

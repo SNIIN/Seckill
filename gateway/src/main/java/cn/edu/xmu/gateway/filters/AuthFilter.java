@@ -24,23 +24,19 @@ public class AuthFilter implements GatewayFilter, Ordered {
     }
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        System.out.println(exchange.getRequest().getCookies().size());
-        for (Map.Entry<String, List<HttpCookie>> cookie: exchange.getRequest().getCookies().entrySet()) {
-            System.out.println(cookie.getKey());
-            System.out.println(cookie.getValue().get(0).getValue());
-        }
         HttpCookie tempToken = exchange.getRequest().getCookies().getFirst("token");
         if (tempToken == null) {
-            System.out.println("没有token1");
             exchange.getResponse().setRawStatusCode(HttpStatus.UNAUTHORIZED.value());
+System.out.println("notoken");
             return exchange.getResponse().setComplete();
         }else {
             String token = tempToken.getValue();
-            System.out.println(token);
+System.out.println(token);
             if (null == token || token.isEmpty() || !redisTemplate.hasKey(String.format("U:%s", token))) {
                 exchange.getResponse().setRawStatusCode(HttpStatus.UNAUTHORIZED.value());
                 return exchange.getResponse().setComplete();
             }
+
         }
         return chain.filter(exchange);
     }

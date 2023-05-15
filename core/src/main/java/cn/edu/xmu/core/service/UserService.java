@@ -17,7 +17,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 @Service
 @Slf4j
 public class UserService{
@@ -74,6 +77,24 @@ public class UserService{
         return token;
     }
 
+    public void loginsForJmeter()  {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(".\\data.csv"))) {
+            List<User> lst = userMapper.selectAllUsers();
+            writer.write("token");
+            writer.newLine();
+            // 默认数据库所有user明文密码为123456， 前端加盐方式相同
+            lst.forEach(i -> {
+                try {
+                    writer.write(loginForJmeter(i.getUserId(), "90aeaad535749f0a6cb8d685e7493dd0"));
+                    writer.newLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } catch (IOException e) {
+            log.warn(e.getMessage());
+        }
+    }
     private static final int TOKEN_LENGTH = 32; // 登录凭证长度为32个字符
 
     // 生成一个随机的登录凭证

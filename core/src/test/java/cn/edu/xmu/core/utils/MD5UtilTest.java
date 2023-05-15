@@ -2,11 +2,9 @@ package cn.edu.xmu.core.utils;
 
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.Assert.assertEquals;
 
-@SpringBootTest
 public class MD5UtilTest {
 
     @Test

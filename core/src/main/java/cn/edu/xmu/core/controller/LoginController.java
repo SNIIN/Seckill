@@ -2,6 +2,7 @@ package cn.edu.xmu.core.controller;
 
 import cn.edu.xmu.core.controller.vo.LoginVo;
 import cn.edu.xmu.core.service.UserService;
+import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.core.utils.ReturnObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +36,9 @@ public class LoginController {
         return returnObject;
     }
 
-//    @Value("${testValue}")
-//    private String testValue;
-//    @GetMapping(value = "/dotest", produces = "application/json;charset=UTF-8")
-//    public ReturnObject test() {
-//        return new ReturnObject(ReturnNo.SUCCESS, "", testValue);
-//    }
+    @PostMapping(value = "/dotest", produces = "application/json;charset=UTF-8")
+    public ReturnObject test() {
+        userService.loginsForJmeter();
+        return new ReturnObject(ReturnNo.SUCCESS, "", "");
+    }
 }

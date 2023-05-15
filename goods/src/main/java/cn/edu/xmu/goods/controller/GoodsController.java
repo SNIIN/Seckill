@@ -32,6 +32,7 @@ public class GoodsController {
     @GetMapping(value = "/glist", produces = "application/json;charset=UTF-8")
     public ReturnObject getlist(@RequestParam(defaultValue = "-1") Integer pageNum,
                                 @RequestParam(defaultValue = "10") Integer pageSize) {
+        log.info("{}， {}", pageNum, pageSize);
         List<SeckillGoodsVo> lst = goodsService.getOnePageGoodsList(pageNum, pageSize);
         return new ReturnObject(ReturnNo.SUCCESS,lst);
     }

@@ -22,7 +22,7 @@
       <module name="goods" options="-parameters" />
       <module name="order" options="-parameters" />
       <module name="seckill" options="-parameters" />
-      <module name="seckill-ms" options="-parameters" />
+      <module name="seckill-ms" options="" />
     </option>
   </component>
 </project>

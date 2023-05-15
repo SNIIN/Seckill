@@ -453,7 +453,7 @@
     password = md5(password);
     console.log(password);
     $.ajax({
-      url: "http://localhost:8090/user/dologin",
+      url: "http://172.22.70.241:8090/user/dologin",
       type: "POST",
       data: JSON.stringify({
         "mobile": username,

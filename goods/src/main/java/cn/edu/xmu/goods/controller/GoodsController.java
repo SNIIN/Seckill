@@ -71,6 +71,12 @@ public class GoodsController {
     }
 
 
+    @GetMapping(value = "/list", produces = "application/json;charset=UTF-8")
+    public List<SeckillGoodsVo> getlistforseckill(@RequestParam(defaultValue = "-1") Integer pageNum,
+                                          @RequestParam(defaultValue = "10") Integer pageSize) {
+        return goodsService.getOnePageGoodsList(pageNum, pageSize);
+    }
+
     @GetMapping(value="/goods", produces = "application/json;charset=UTF-8")
     GoodsVo getOneGoods(@RequestParam("goodsid") Long goodsId) {
 //        try {

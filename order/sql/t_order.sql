@@ -14,7 +14,7 @@ Date: 2023-05-04 11:58:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
+USE seckill_order;
 -- ----------------------------
 -- Table structure for t_order
 -- ----------------------------

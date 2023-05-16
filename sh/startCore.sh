@@ -1,9 +1,10 @@
 #!/bin/bash
 
 cd ..
-docker rm -f core
+docker service remove core
 docker rmi core
 mvn clean install -DskipTests -Dmaven.repo.local=/Seckill
+docker node update --label-add $2=core $1
 cd core
 docker build --build-arg JAR_FILE=core-0.0.1-SNAPSHOT-exec.jar -t core .
-docker run -d --name core -p 8080:8080 --network mynet core
+docker service create -d --name core -p 8080:8080 --constraint node.labels.$2==core --network mynet core

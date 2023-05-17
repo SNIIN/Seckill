@@ -9,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.Map;
-
 
 public class AuthFilter implements GatewayFilter, Ordered {
     private final RedisTemplate redisTemplate;
@@ -27,11 +24,9 @@ public class AuthFilter implements GatewayFilter, Ordered {
         HttpCookie tempToken = exchange.getRequest().getCookies().getFirst("token");
         if (tempToken == null) {
             exchange.getResponse().setRawStatusCode(HttpStatus.UNAUTHORIZED.value());
-System.out.println("notoken");
             return exchange.getResponse().setComplete();
         }else {
             String token = tempToken.getValue();
-System.out.println(token);
             if (null == token || token.isEmpty() || !redisTemplate.hasKey(String.format("U:%s", token))) {
                 exchange.getResponse().setRawStatusCode(HttpStatus.UNAUTHORIZED.value());
                 return exchange.getResponse().setComplete();

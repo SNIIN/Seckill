@@ -78,7 +78,7 @@ public class UserService{
     }
 
     public void loginsForJmeter()  {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(".\\data.csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/jmeter/data.csv"))) {
             List<User> lst = userMapper.selectAllUsers();
             writer.write("token");
             writer.newLine();

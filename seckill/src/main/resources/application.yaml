@@ -21,6 +21,8 @@ spring:
     nacos:
       discovery:
         server-addr: nacos:8848
+    inetutils:         
+      preferred-networks: 10.0.1.;
 
   rabbitmq:
     host: 47.120.5.153

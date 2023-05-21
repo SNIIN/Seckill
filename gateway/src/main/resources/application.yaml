@@ -9,6 +9,8 @@ spring:
     nacos:
       discovery:
         server-addr: nacos:8848
+    inetutils:         
+      preferred-networks: 10.0.1.;
     gateway:
       globalcors:
         cors-configurations:

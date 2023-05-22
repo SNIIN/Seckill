@@ -31,13 +31,18 @@ public class SeckillService implements InitializingBean {
 
 
     public void doSeckill(UserVo user, Long seckillId) {
-        // 重复抢购
+        // 判断是否存在重复抢购
         if (redisUtil.isSetMember(String.format("UOG:%d", user.getUserId()), seckillId))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_USER_REPEAT);
+        // 检查秒杀商品是否存在
         SeckillGoodsVo goods = (SeckillGoodsVo) redisUtil.getValueByKey(SeckillGoodsVo.RedisKey(seckillId));
+        if (null == goods)
+            throw new SeckillException(ReturnNo.SECKILL_GOODS_NON);
+        // 检查该秒杀活动是否正在进行
         Date now = new Date();
         if (!(now.after(goods.getBeginTime())&&now.before(goods.getEndTime())))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_EXIST);
+        // 检查秒杀库存是否充足
         if (emptySeckillStock.getOrDefault(seckillId, false))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         Long stock = redisUtil.decr(SeckillGoodsVo.RedisSeckillStockKey(seckillId));
@@ -46,6 +51,7 @@ public class SeckillService implements InitializingBean {
             emptySeckillStock.put(seckillId, true);
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         }
+        // 发送消息到消息队列中
         rabbitSender.send(user, seckillId);
     }
 

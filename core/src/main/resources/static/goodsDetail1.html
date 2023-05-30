@@ -134,7 +134,7 @@
         var seckillId = g_getQueryString("seckillid");
         layer.load();
         $.ajax({
-            url: `http://172.22.70.241:8090/goods/gdetail?seckillid=${seckillId}`,
+            url: `http://localhost:8083/goods/gdetail?seckillid=${seckillId}`,
             type: "GET",
                 xhrFields: {
                     withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的
@@ -162,7 +162,7 @@
         });
         $("#buyButton").click(function() {
             $.ajax({
-                url: `http://172.22.70.241:8090/seckill/${seckillId}`,
+                url: `http://localhost:8084/seckill/${seckillId}`,
                 xhrFields: {
                     withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的
                 },
@@ -203,7 +203,7 @@
         g_showLoading();
         console.log(flag);
         $.ajax({
-            url: `http://172.22.70.241:8090/order/result/${seckillId}`,
+            url: `http://localhost:8085/order/result/${seckillId}`,
             type: "GET",
             xhrFields: {
                 withCredentials: true //默认情况下，标准的跨域请求是不会发送cookie的

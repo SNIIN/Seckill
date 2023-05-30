@@ -65,14 +65,20 @@ public class OrderControllerTest {
                         .cookie(new Cookie("token", "abc")))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_ORDER_NON.getCode())));
+    }
 
+    @Test
+    public void testGetOrder3() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(ORDER_URL)
                         .param("orderId", "131998")
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("token", "abc")))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_NON.getCode())));
+  }
 
+    @Test
+    public void testGetOrder4() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(ORDER_URL)
                         .param("orderId", "131995")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -96,7 +102,9 @@ public class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.LOGIN_NON.getCode())));
-
+    }
+    @Test
+    public void testGetResult3() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(String.format(RESULT_URL, 3))
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("token", "abc")))
@@ -104,5 +112,4 @@ public class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SUCCESS.getCode())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data", is(0)));
     }
-
 }

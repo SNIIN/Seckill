@@ -4,6 +4,7 @@ import cn.edu.xmu.core.controller.vo.LoginVo;
 import cn.edu.xmu.core.service.UserService;
 import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.core.utils.ReturnObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class LoginController {
 
     @PostMapping(value = "/dologin", produces = "application/json;charset=UTF-8")
     public ReturnObject doLogin(@Valid @RequestBody LoginVo loginVo,
-                                HttpServletResponse httpServletResponse) {
+                                HttpServletResponse httpServletResponse) throws JsonProcessingException {
         logger.info(loginVo.toString());
         ReturnObject returnObject = userService.doLogin(loginVo, httpServletResponse);
         return returnObject;

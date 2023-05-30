@@ -1,9 +1,13 @@
 package cn.edu.xmu.core.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -70,6 +74,16 @@ public class RedisUtil {
         return true;
     }
 
+    public void saveToken(String userId, String token, String user) {
+        // 创建一个DefaultRedisScript对象
+        DefaultRedisScript<Void> redisScript = new DefaultRedisScript<>();
+        // 指定Lua脚本的位置
+        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("script/delToken.lua")));
+        // 指定脚本执行结果的类型
+        redisScript.setResultType(null);
+        // 执行脚本
+        redisTemplate.execute(redisScript, Arrays.asList(userId, token), user);
+    }
     public Long incr(String key) {
         return redisTemplate.opsForValue().increment(key);
     }

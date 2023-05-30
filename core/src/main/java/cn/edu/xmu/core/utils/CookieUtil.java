@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class CookieUtil {
-    public static final String DOMAIN = "172.22.70.241";
+    public static final String DOMAIN = "localhost";
     public static String getCookieValue(HttpServletRequest httpServletRequest, String cookieName) {
         Cookie[] cookies = httpServletRequest.getCookies();
         if (cookies == null || cookieName == null) return null;

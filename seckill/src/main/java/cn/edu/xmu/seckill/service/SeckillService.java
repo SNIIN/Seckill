@@ -43,12 +43,9 @@ public class SeckillService implements InitializingBean {
         if (!(now.after(goods.getBeginTime())&&now.before(goods.getEndTime())))
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_EXIST);
         // 检查秒杀库存是否充足
-        if (emptySeckillStock.getOrDefault(seckillId, false))
-            throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         Long stock = redisUtil.decr(SeckillGoodsVo.RedisSeckillStockKey(seckillId));
         if (stock < 0) {
             redisUtil.incr(SeckillGoodsVo.RedisSeckillStockKey(seckillId));
-            emptySeckillStock.put(seckillId, true);
             throw new SeckillException(ReturnNo.SECKILL_GOODS_NOT_REST);
         }
         // 发送消息到消息队列中

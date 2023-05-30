@@ -7,8 +7,6 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -19,12 +17,7 @@ public class RateLimiterGatewayFilterFactory extends AbstractGatewayFilterFactor
     private BlockingQueue<Runnable> queue;
     public RateLimiterGatewayFilterFactory() {
         super(Config.class);
-        queue = new LinkedBlockingDeque<>(10000);
-         new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                processQueue();
-            }}, 0, 1000); // 每隔1秒钟执行一次任务
+        queue = new LinkedBlockingDeque<>(30000);
     }
 
     @Override
@@ -33,31 +26,16 @@ public class RateLimiterGatewayFilterFactory extends AbstractGatewayFilterFactor
             rateLimiter = RateLimiter.create(config.getPermitsPerSecond());
         }
         return (exchange, chain) -> {
-
             if (rateLimiter.tryAcquire()) {
                 // 充足的令牌
                 return chain.filter(exchange);
             } else {
-                try {
-                    queue.put(() -> chain.filter(exchange));
-                    exchange.getResponse().setStatusCode(HttpStatus.ACCEPTED);
-                    return exchange.getResponse().setComplete();
-                } catch (InterruptedException e) {
-                    log.error("Error adding request to queue", e);
-                    exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
-                    return exchange.getResponse().setComplete();
-                }
+                exchange.getResponse().setStatusCode(HttpStatus.ACCEPTED);
+                return exchange.getResponse().setComplete();
             }
         };
     }
-    private void processQueue() {
-        // 每秒处理100个请求
-        for (int i = 0; i < 100; ++i) {
-            Runnable task = queue.poll(); // 从队列中取出一个请求
-            if (task == null) break; // 队列为空
-            task.run(); // 处理请求
-        }
-    }
+
     public static class Config {
         private double permitsPerSecond;
 

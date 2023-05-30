@@ -32,9 +32,15 @@ public class SeckillController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public ReturnObject doSeckill(@SeckillUser UserVo user, @PathVariable("seckillid") Long seckillId, HttpServletRequest httpServletRequest) {
-        log.info("控制器: {}，{}",  user, seckillId);
+        log.info("秒杀请求: {}，{}",  user, seckillId);
         seckillService.doSeckill(user, seckillId);
         return new ReturnObject(ReturnNo.SECKILL_GOODS_IN_QUEUE, "", "排队中...");
     }
+
+//    @GetMapping(value = "/so", produces = "application/json;charset=UTF-8")
+//    @ResponseBody
+//    public ReturnObject doSeckill() {
+//        return new ReturnObject(ReturnNo.SECKILL_GOODS_IN_QUEUE, "", "排队中...");
+//    }
 
 }

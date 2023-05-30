@@ -6,6 +6,8 @@ import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.utils.CookieUtil;
 import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.core.utils.ReturnNo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -20,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @Slf4j
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
-
+    ObjectMapper objectMapper = new ObjectMapper();
     private final RedisUtil redisUtil;
 
     @Autowired
@@ -34,7 +36,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws JsonProcessingException {
         Long begin = System.currentTimeMillis();
         HttpServletRequest httpServletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         if (null == httpServletRequest)
@@ -44,7 +46,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         if (null == token || token.isEmpty()) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }
-        UserVo user = (UserVo) redisUtil.getValueByKey(UserVo.RedisKey(token));
+        UserVo user = objectMapper.readValue((String)redisUtil.getValueByKey(UserVo.RedisKey(token)), UserVo.class);
         if (null == user) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }

@@ -16,7 +16,7 @@ public class CorsConfig implements WebMvcConfigurer {
          allowedHeaders：允许所有的请求header访问，可以自定义设置任意请求头信息。
          **/
         registry.addMapping("/**")
-                .allowedOrigins("http://172.22.70.241:8080")
+                .allowedOrigins("http://localhost:8080")
                 .allowedHeaders("*")
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS", "HEAD")

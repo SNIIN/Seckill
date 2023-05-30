@@ -8,6 +8,7 @@ import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.utils.RedisUtil;
 import cn.edu.xmu.core.utils.ReturnNo;
 import cn.edu.xmu.core.utils.ReturnObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class UserServiceTest {
         Mockito.when(redisUtil.getValueByKey("U:token")).thenReturn(user1);
     }
     @Test
-    public void testDoLogin() {
+    public void testDoLogin() throws JsonProcessingException {
         HttpServletResponse httpServletResponse = mock(HttpServletResponse.class);
         // 登录成功
         ReturnObject returnObject1 = userService.doLogin(loginVo1, httpServletResponse);

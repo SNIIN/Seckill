@@ -37,19 +37,24 @@ public class LoginControllerTest {
     }
 
     @Test
-    public void testDoLogin() throws Exception {
+    public void testDoLogin1() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/dologin")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(loginVo1))
         ).andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SUCCESS.getCode())));
+    }
 
+    @Test
+    public void testDoLogin2() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/dologin")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(loginVo2))
                 ).andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.LOGIN_ERROR.getCode())));
-
+    }
+    @Test
+    public void testDoLogin3() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/dologin")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(loginVo3))

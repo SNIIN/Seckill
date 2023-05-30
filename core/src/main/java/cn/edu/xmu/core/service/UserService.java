@@ -6,6 +6,8 @@ import cn.edu.xmu.core.exception.SeckillException;
 import cn.edu.xmu.core.mapper.UserMapper;
 import cn.edu.xmu.core.mapper.entity.User;
 import cn.edu.xmu.core.utils.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,21 +15,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 @Service
 @Slf4j
 public class UserService{
+    ObjectMapper objectMapper = new ObjectMapper();
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserMapper userMapper;
     private final RedisUtil redisUtil;
+    private final static SecureRandom random = new SecureRandom();
     @Autowired
     UserService(UserMapper userMapper, RedisUtil redisUtil) {
         this.redisUtil = redisUtil;
@@ -35,7 +41,7 @@ public class UserService{
     }
 
 
-    public ReturnObject doLogin(LoginVo loginVo, HttpServletResponse httpServletResponse) {
+    public ReturnObject doLogin(LoginVo loginVo, HttpServletResponse httpServletResponse) throws JsonProcessingException {
         Long userId = Long.parseLong(loginVo.getMobile());
         User user = userMapper.selectByPrimaryKey(userId);
         if (null == user) {
@@ -45,10 +51,10 @@ public class UserService{
             throw new SeckillException(ReturnNo.LOGIN_ERROR);
         }
         // 生成登录凭证，存入cookie中
-        String token = generateLoginToken();
+        String token2 = generateLoginToken();
         UserVo userVo = UserVo.builder().userId(user.getUserId()).head(user.getHead()).nickname(user.getNickname()).build();
-        redisUtil.addAsKeyValue(userVo.RedisKey(token), userVo, true);
-        CookieUtil.setCookieValue(httpServletResponse, "token", token);
+        redisUtil.saveToken(userVo.RedisKey(userId.toString()), userVo.RedisKey(token2), objectMapper.writeValueAsString(userVo));
+        CookieUtil.setCookieValue(httpServletResponse, "token", token2);
         return new ReturnObject(ReturnNo.SUCCESS);
     }
 
@@ -63,7 +69,7 @@ public class UserService{
      * @param password
      * @return
      */
-    public String loginForJmeter(Long userId, String password) {
+    public String loginForJmeter(Long userId, String password) throws JsonProcessingException {
         User user = userMapper.selectByPrimaryKey(userId);
         if (null == user) {
             throw new SeckillException(ReturnNo.LOGIN_ERROR);
@@ -73,12 +79,12 @@ public class UserService{
         }
         String token = generateLoginToken();
         UserVo userVo = UserVo.builder().userId(user.getUserId()).head(user.getHead()).nickname(user.getNickname()).build();
-        redisUtil.addAsKeyValue(userVo.RedisKey(token), userVo, true);
+        redisUtil.saveToken(userVo.RedisKey(userId.toString()), userVo.RedisKey(token), objectMapper.writeValueAsString(userVo));
         return token;
     }
 
     public void loginsForJmeter()  {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/jmeter/data.csv"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("./data.csv", StandardCharsets.UTF_8))) {
             List<User> lst = userMapper.selectAllUsers();
             writer.write("token");
             writer.newLine();
@@ -100,7 +106,6 @@ public class UserService{
     // 生成一个随机的登录凭证
     private static String generateLoginToken() {
         // 生成32字节的随机数据
-        SecureRandom random = new SecureRandom();
         byte[] tokenBytes = new byte[TOKEN_LENGTH];
         random.nextBytes(tokenBytes);
         String token;
@@ -112,7 +117,7 @@ public class UserService{
             // 对哈希结果进行Base64编码，得到登录凭证
             token = Base64.getEncoder().encodeToString(hashBytes);
         }catch(NoSuchAlgorithmException e) {
-            token = tokenBytes.toString();
+            token = Arrays.toString(tokenBytes);
         }
         return token;
     }

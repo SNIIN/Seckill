@@ -1,5 +1,8 @@
 server:
   port: 8090
+  tomcat:
+    max-connections: 10000
+    accept-count: 200
 
 spring:
   application:
@@ -16,7 +19,7 @@ spring:
         cors-configurations:
           '[/**]':
             allowed-origins:
-              - "http://172.22.70.241:8080"
+              - "http://localhost:8080"
             allowed-methods:
               - GET
               - POST
@@ -52,6 +55,9 @@ spring:
             - Path=/seckill/**
           filters:
             - name: AuthFilterFactory
+            - name: RateLimiter
+              args:
+                permitsPerSecond: 100
   redis:
     host: redis
     port: 6379

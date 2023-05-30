@@ -1,4 +1,4 @@
-package cn.edu.xmu.seckill.controller;
+package cn.edu.xmu.seckill;
 
 import cn.edu.xmu.core.controller.vo.SeckillGoodsVo;
 import cn.edu.xmu.core.controller.vo.UserVo;
@@ -23,9 +23,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
+
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SeckillControllerTest {
+public class BoundaryTest {
     private static final String SECKILL_URL = "/seckill/%d";
     @Autowired
     private MockMvc mockMvc;
@@ -37,17 +38,21 @@ public class SeckillControllerTest {
     RabbitSender rabbitSender;
     private UserVo userVo;
     private SeckillGoodsVo seckillGoodsVo;
-    private Date date1, date2;
+    private Date beforeNow5, afterNow5, afterNow60;
+
     @BeforeEach
     public void setUp() {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.DATE, -1);
-        date1 = calendar.getTime();
+        calendar.add(Calendar.SECOND, -5);
+        beforeNow5 = calendar.getTime();
         calendar.setTime(date);
-        calendar.add(Calendar.DATE, 1);
-        date2 = calendar.getTime();
+        calendar.add(Calendar.SECOND, 5);
+        afterNow5 = calendar.getTime();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, 60);
+        afterNow60 = calendar.getTime();
 
         seckillGoodsVo = new SeckillGoodsVo();
         seckillGoodsVo.setSeckillId(2l);
@@ -61,22 +66,52 @@ public class SeckillControllerTest {
     }
 
     @Test
-    public void testDoSeckill1() throws Exception {
-        seckillGoodsVo.setBeginTime(date1);
-        seckillGoodsVo.setEndTime(date2);
+    public void testPeriodBoundary1() throws Exception {
+        // 活动开始前5s抢购
+        seckillGoodsVo.setBeginTime(afterNow5);
+        seckillGoodsVo.setEndTime(afterNow60);
         Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(2l);
         Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(1l);
         mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
-                .contentType(MediaType.APPLICATION_JSON)
-                .cookie(new Cookie("token", "abc")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("token", "abc")))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_NOT_EXIST.getCode())));
+    }
+
+    @Test
+    public void testPeriodBoundary2() throws Exception {
+        // 活动开始后5s抢购
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(afterNow60);
+        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(2l);
+        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(1l);
+        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("token", "abc")))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_IN_QUEUE.getCode())));
     }
 
     @Test
-    public void testDoSeckill2() throws Exception {
-        seckillGoodsVo.setBeginTime(date2);
-        seckillGoodsVo.setEndTime(date2);
+    public void testPeriodBoundary3() throws Exception {
+        // 活动结束前5s抢购
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(afterNow5);
+        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(2l);
+        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(1l);
+        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("token", "abc")))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_IN_QUEUE.getCode())));
+    }
+
+    @Test
+    public void testPeriodBoundary4() throws Exception {
+        // 活动结束后5s抢购
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(beforeNow5);
         Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(2l);
         Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(1l);
         mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
@@ -87,45 +122,24 @@ public class SeckillControllerTest {
     }
 
     @Test
-    public void testDoSeckill3() throws Exception {
-        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(2l);
-        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(1l);
-        seckillGoodsVo.setBeginTime(date1);
-        seckillGoodsVo.setEndTime(date1);
+    public void testRestBoundary1() throws Exception {
+        // 秒杀库存剩余1件
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(afterNow60);
+        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(1l);
+        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(0l);
         mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("token", "abc")))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_NOT_EXIST.getCode())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_IN_QUEUE.getCode())));
     }
+
     @Test
-    public void testDoSeckill4() throws Exception {
-        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(2l);
-        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(1l);
-        seckillGoodsVo.setBeginTime(date2);
-        seckillGoodsVo.setEndTime(date1);
-        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .cookie(new Cookie("token", "abc")))
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_NOT_EXIST.getCode())));
-    }
-    @Test
-    public void testDoSeckill5() throws Exception {
-        seckillGoodsVo.setBeginTime(date1);
-        seckillGoodsVo.setEndTime(date2);
-        Mockito.when(redisUtil.incr("SG_STOCK:3")).thenReturn(2l);
-        Mockito.when(redisUtil.decr("SG_STOCK:3")).thenReturn(1l);
-        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 3))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .cookie(new Cookie("token", "abc")))
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_USER_REPEAT.getCode())));
-    }
-    @Test
-    public void testDoSeckill6() throws Exception {
-        seckillGoodsVo.setBeginTime(date1);
-        seckillGoodsVo.setEndTime(date2);
+    public void testRestBoundary2() throws Exception {
+        // 秒杀库存剩余0件
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(afterNow60);
         Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(0l);
         Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(-1l);
         mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
@@ -134,16 +148,33 @@ public class SeckillControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_NOT_REST.getCode())));
     }
+
     @Test
-    public void testDoSeckill7() throws Exception {
-        seckillGoodsVo.setBeginTime(date1);
-        seckillGoodsVo.setEndTime(date2);
-        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(0l);
-        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(-1l);
-        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 10086))
+    public void testCntBoundary1() throws Exception {
+        // 已购0件
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(afterNow60);
+        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(1l);
+        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(0l);
+        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
                         .contentType(MediaType.APPLICATION_JSON)
                         .cookie(new Cookie("token", "abc")))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_NON.getCode())));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_IN_QUEUE.getCode())));
+    }
+
+    @Test
+    public void testCntBoundary2() throws Exception {
+        // 已购1件
+        Mockito.when(redisUtil.isSetMember("UOG:17777777777", 2l)).thenReturn(true);
+        seckillGoodsVo.setBeginTime(beforeNow5);
+        seckillGoodsVo.setEndTime(afterNow60);
+        Mockito.when(redisUtil.incr("SG_STOCK:2")).thenReturn(0l);
+        Mockito.when(redisUtil.decr("SG_STOCK:2")).thenReturn(-1l);
+        mockMvc.perform(MockMvcRequestBuilders.post(String.format(SECKILL_URL, 2))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .cookie(new Cookie("token", "abc")))
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=utf-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.returnNo.code", is(ReturnNo.SECKILL_GOODS_USER_REPEAT.getCode())));
     }
 }

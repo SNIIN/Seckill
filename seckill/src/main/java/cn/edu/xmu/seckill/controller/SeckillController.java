@@ -37,10 +37,10 @@ public class SeckillController {
         return new ReturnObject(ReturnNo.SECKILL_GOODS_IN_QUEUE, "", "排队中...");
     }
 
-//    @GetMapping(value = "/so", produces = "application/json;charset=UTF-8")
-//    @ResponseBody
-//    public ReturnObject doSeckill() {
-//        return new ReturnObject(ReturnNo.SECKILL_GOODS_IN_QUEUE, "", "排队中...");
-//    }
+    @GetMapping(value = "/so", produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public ReturnObject doSeckill() {
+        return new ReturnObject(ReturnNo.SECKILL_GOODS_IN_QUEUE, "", "排队中...");
+    }
 
 }

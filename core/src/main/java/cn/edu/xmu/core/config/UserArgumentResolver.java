@@ -46,10 +46,11 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         if (null == token || token.isEmpty()) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }
-        UserVo user = objectMapper.readValue((String)redisUtil.getValueByKey(UserVo.RedisKey(token)), UserVo.class);
-        if (null == user) {
+        String userVo = (String)redisUtil.getValueByKey(UserVo.RedisKey(token));
+        if (null == userVo) {
             throw new SeckillException(ReturnNo.LOGIN_NON);
         }
+        UserVo user = objectMapper.readValue(userVo, UserVo.class);
         Long end = System.currentTimeMillis();
         log.info("解析登录(成功)耗时：{}ms", end-begin);
         return user;

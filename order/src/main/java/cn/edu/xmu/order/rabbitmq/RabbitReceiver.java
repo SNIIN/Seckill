@@ -50,23 +50,26 @@ public class RabbitReceiver {
         if (unlocked != null && unlocked) {
             try {
                 Long result = orderService.getOrderByUserIdAndSeckillId(user.getUserId(), seckillId);
-                if (result > 0)
+                if (result > 0) {
+                    redisUtil.incr(String.format("SG_STOCK:%d", seckillId));
                     return;
+                }
                 // 判断user合法性,略
                 SeckillGoodsVo goods = (SeckillGoodsVo) redisTemplate.opsForValue().get(SeckillGoodsVo.RedisKey(seckillId));
                 if (null == result) {
                     goods = goodsService.getOneSeckillGoods(seckillId);
                     redisUtil.addAsKeyValue(SeckillGoodsVo.RedisKey(seckillId), goods, true);
                 }
-                if (null == goods)
+                if (null == goods || goodsService.downSeckillsCount(seckillId)) {
+                    redisUtil.incr(String.format("SG_STOCK:%d", seckillId));
                     return;
-                if (goodsService.downSeckillsCount(seckillId))
-                    return;
+                }
                 orderService.createOrder(goods, user);
             }finally {
                 redisTemplate.delete(String.format("LOCK_US:%d_%d", user.getUserId(), seckillId));
             }
         }else {
+            redisUtil.incr(String.format("SG_STOCK:%d", seckillId));
             throw new SeckillException(ReturnNo.SECKILL_ORDER_NON);
         }
     }

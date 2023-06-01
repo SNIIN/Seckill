@@ -2,9 +2,17 @@
 
 目前已完成数据库分库、服务拆分、注册、通信。<br>
 ### 服务拆分后的拓扑图:
-<img src="https://user-images.githubusercontent.com/92317070/232967479-e6f49c05-04a6-4fa9-b022-0c19ad137942.png" heigh="380px" width="380px">
+![image](https://github.com/SNIIN/Seckill/assets/92317070/af6a739f-04a8-4397-9865-4a604f788efd)
 
-### 预期接下来的实现：
-编写脚本在docker上部署各个服务，预期使用多台主机加入docker swarm中。<br>
-实现网关流量控制与分发<br>
-到实验室实际部署测试效率<br>
+### 测试性能
+在err率为0,99%请求可以在100ms内处理的情况下测试得到的最大吞吐量：
+![image](https://github.com/SNIIN/Seckill/assets/92317070/6c05b38b-0567-40af-a822-7e68417d1103)
+
+
+### 相对于单机应用的优化
+* 应用拆分、数据库拆分，资源得到扩展，系统有横向扩展能力，支持在docker swarm上部署
+* 优化rabbitmq处理逻辑，解决了重复限购的问题
+* 修改此前登录bug，确保用户至始至终只有一个token
+* 使用lua脚本原子化了许多redis操作，减少网络请求
+* 引入了异步响应式的网关，可以快速过滤许多不合理的请求
+* 网关添加令牌桶限速+阻塞队列缓存请求，用户秒杀将得到更快地反馈，系统也将容纳更多的秒杀请求。
